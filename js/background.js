@@ -1,34 +1,28 @@
 let lookTimer = 0;
-
+let timerID;
 setLookTimer();
 
 
 function setLookTimer(){
+  console.log('setting look timer');
+  clearInterval(timerID);
   lookTimer = 4;
 
-  let timerID = setInterval(() => { 
+  timerID = setInterval(() => { 
    
     console.log ('in setInterval. lookTimer is', lookTimer);
     if (lookTimer > 0) {
       lookTimer--;
     }
     else {
-
-      chrome.notifications.create('timeToLook', {
-        type: 'basic',
-        iconUrl: '/Eye128.png',
-        title: 'Test Message',
-        message: 'You are awesome!',
-        priority: 2
-      });
-
+      makeTimeToLookNotification();
       clearInterval(timerID);
       return;
     }
 
-    //sending lookTimer to popup
+    //using this setup to SEND lookTimer to popup
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-      if (request.method == "getStatus") {
+      if (request.method == "lookTimerStatus") {
           sendResponse({ method: "", data: lookTimer }) 
       }
     })
@@ -36,6 +30,15 @@ function setLookTimer(){
   }, 1000);
 }
 
+function makeTimeToLookNotification(){
+  chrome.notifications.create('timeToLook', {
+    type: 'basic',
+    iconUrl: '/Eye128.png',
+    title: 'Time to look!',
+    message: 'Focus on something at least 20 feet away, for 20 seconds',
+    priority: 2
+  });
+}
  
 chrome.notifications.onClosed.addListener(function(timeToLook) {
   //runs when this notification is closed
@@ -43,3 +46,12 @@ chrome.notifications.onClosed.addListener(function(timeToLook) {
   setLookTimer();
 });
 
+
+//using this setup to RECEIVE "true" from popup (re: click "take a break" = true)
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.method == "takeBreakStatus" && request.data === true) {
+      setLookTimer();
+
+      sendResponse({ method: "", data: "" })
+  }
+});
