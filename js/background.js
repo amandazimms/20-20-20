@@ -25,6 +25,14 @@ function setLookTimer(){
       clearInterval(timerID);
       return;
     }
+
+    //sending lookTimer to popup
+    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+      if (request.method == "getStatus") {
+          sendResponse({ method: "", data: lookTimer }) 
+      }
+    })
+
   }, 1000);
 }
 
@@ -35,9 +43,3 @@ chrome.notifications.onClosed.addListener(function(timeToLook) {
   setLookTimer();
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.method == "getStatus") {
-      console.log(request.data)
-      sendResponse({ method: "HEHY", data: "HEYYOU" })
-  }
-})

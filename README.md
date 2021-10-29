@@ -33,7 +33,7 @@ Acknowledgements coming!
 Phase 2 - complete functionality:
   *** see lines 12+ in popup.js for next steps
 [x] make notifications appear via a timer instead of button-on-dom
-[ ] when notification is closed, restart timer
+[x] when notification is closed, restart timer
 [ ] display timer count on popup
 [ ] display a message on the popup
 
