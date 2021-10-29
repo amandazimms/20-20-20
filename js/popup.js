@@ -9,6 +9,26 @@ $( document ).ready( function(){
   
 });
 
+//this block makes a notification run when you click the extension
+// (because a popup is opening, so this script is opening)
+// SO we should be able to tuck this chunk only into a timer - within app.js? 
+//or the timer lives on background and this on app?
+// chrome.runtime.sendMessage('', {
+//       type: 'notification',
+//       options: {
+//         title: 'INITIAL',
+//         message: 'notification',
+//         iconUrl: '/icon.png',
+//         type: 'basic',
+//         priority: 2
+//       }
+//     });
+
+    chrome.alarms.create('lookTimer', {
+      periodInMinutes: .1
+
+    });
+
 
 function hasLooked(){
   timeToLook = true;
