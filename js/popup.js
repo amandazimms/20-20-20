@@ -14,12 +14,12 @@ function takeBreak(){
   chrome.runtime.sendMessage({ method: "takeBreakStatus", data: true }, function (res) {
     return true;
   });
-
 }
 
 function checkTime(){ 
   
   setInterval(() => { 
+    breakNow.text("Take A Break Early");
   
     //using this to RECEIVE lookTimer from background
     chrome.runtime.sendMessage({ method: "lookTimerStatus", data: "" }, function (res) { 
@@ -27,9 +27,10 @@ function checkTime(){
 
       if (currentTimer > 0)
         timerTag.text(`Time until next break: ${currentTimer}`);
-      else  
+      else  {
         timerTag.text(`It's time for 20-20-20`);
-      return true;
+        breakNow.text("Take A Break");
+      }
     }); 
   }, 500); 
 }

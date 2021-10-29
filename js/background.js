@@ -6,6 +6,9 @@ setLookTimer();
 function setLookTimer(){
   console.log('setting look timer');
   clearInterval(timerID);
+
+  chrome.notifications.clear('timeToLook');
+
   lookTimer = 4;
 
   timerID = setInterval(() => { 
