@@ -32,7 +32,7 @@ Acknowledgements coming!
 
 Phase 2 - complete functionality:
   *** see lines 12+ in popup.js for next steps
-[ ] make notifications appear via a timer instead of button-on-dom
+[x] make notifications appear via a timer instead of button-on-dom
 [ ] when notification is closed, restart timer
 [ ] display timer count on popup
 [ ] display a message on the popup
@@ -41,4 +41,4 @@ Phase 2 - complete functionality:
 Phase 3 - enhance features:
 [ ] display some stat on the popup - how many times has user looked (closed notification)?
 [ ] add mad styling - notification customization, popup CSS
-[ ] add GFX - icon, more graphics for popup?
+[.] add GFX - icon, more graphics for popup?
