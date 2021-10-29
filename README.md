@@ -29,17 +29,25 @@ Acknowledgements coming!
 <!-- todo -->
 
 
+## Progress
 
-Phase 2 - complete functionality:
-  *** see lines 12+ in popup.js for next steps
-[x] make notifications appear via a timer instead of button-on-dom
-[x] when notification is closed, restart timer
-[x] display timer count on popup
-[x] display a message on the popup
+### Phase 2 - complete basic functionality:
+- [x] make notifications appear via a timer instead of button-on-dom
+- [x] when notification is closed, restart timer
+- [x] display timer count on popup
+- [x] display a message on the popup
 
 
-Phase 3 - enhance features:
-[ ] add more instructions/feedback for user: e.g. when 'take a break' is clicked, should include a note about how to do 20-20-20, then *wait 20 sec*, then start the 20 min timer. 
-[ ] display some stat on the popup - how many times has user looked (closed notification)?
-[ ] add mad styling - notification customization, popup CSS
-[.] add GFX - icon, more graphics for popup?
+### Phase 3 - styling and UX:
+- [x] add more instructions/feedback for user: e.g. when 'take a break' is clicked, should include a note about how to do 20-20-20, then *wait 20 sec*, then start the 20 min timer. 
+- [ ] add title and logo to popup and style
+- [ ] add description to popup and style
+- [ ] style popup button
+
+### Phase 4 - polish and additional features:
+- [ ] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?
+- [ ] add a pause button - see toucan toggle
+- [ ] add link to 20-20-20 info in popup
+
+### Stretch goals
+- [ ] expand functionality for other types of breaks - stretching, water, exercise, sit/stand desk, etc?
