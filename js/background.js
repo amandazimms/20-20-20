@@ -1,8 +1,8 @@
 let countdown = 0; //countown - when finished, time to either start or stop taking a break
 let isTakingBreak = false; //BREAK, throughout, refers to looking away, e.g. practicing the '20-20-20' rule
 
-const timeBetweenBreaks = 10; //how long between breaks - 20 minutes = 1200 seconds
-const breakDuration = 5; //how long to take a break - 20 seconds
+const timeBetweenBreaks = 4; //how long between breaks - 20 minutes = 1200 seconds
+const breakDuration = 3; //how long to take a break - 20 seconds
 
 let countdownID; //used to start and stop countdowns
 
