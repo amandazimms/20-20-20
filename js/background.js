@@ -1,10 +1,13 @@
-let countdown = 0; //countown - when finished, time to either start or stop taking a break
-let isTakingBreak = false; //BREAK, throughout, refers to looking away, e.g. practicing the '20-20-20' rule
+let currentStatus = { //object that be sent to popup.js every second.
+  isTakingBreak: false, //BREAK, throughout, refers to looking away, e.g. practicing the '20-20-20' rule
+  countdown: 0  //countown - when finished, time to either start or stop taking a break
+}; 
 
 const timeBetweenBreaks = 7; //how long between breaks - 20 minutes = 1200 seconds
 const breakDuration = 5; //how long to take a break - 20 seconds
 
 let countdownID; //used to start and stop countdowns
+
 
 setCountdownTilBreak();
 
@@ -15,39 +18,39 @@ function setCountdownTilBreak(){
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(countdownID);
   chrome.notifications.clear('timeToBreak');
-  countdown = timeBetweenBreaks;
-  isTakingBreak = false;
+  currentStatus.countdown = timeBetweenBreaks;
+  currentStatus.isTakingBreak = false;
   
-  //using this setup to SEND isTakingBreak to popup
-  chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.method == "isBreakStatus") {
-        sendResponse({ method: "", data: isTakingBreak }) 
-    }
-  })
 
   countdownID = setInterval(() => { //countdown til 0, then make a notification
-    
-   // console.log ('in setInterval. time til next break is', countdown);
-    if (countdown > 0) {
-      countdown--;
+    doBreakCountdown();
+  }, 1000); //(ms) - runs every 1 second
+}
+
+function doBreakCountdown(){
+    console.log("in doBreakCountdown. currentStatus:", currentStatus);
+
+    //using this setup to SEND currentStatus to popup
+    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+      if (request.method == "currentStatus") {
+          sendResponse({ method: "", data: currentStatus }) 
+      }
+    })
+
+    if (currentStatus.countdown > 0) {
+      currentStatus.countdown--;
     }
     else {
       makeBreakNotification();
       clearInterval(countdownID);
       return;
     }
-
-    //using this setup to SEND timeUntilNextLook to popup for display there
-    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-      if (request.method == "timeTilBreakStatus") {
-          sendResponse({ method: "", data: countdown }) 
-      }
-    })
-  }, 1000); //(ms) - runs every 1 second
 }
 
 //PHASE 2: MAKE a "take a break" notification for user
 function makeBreakNotification(){
+  console.log('making notification');
+
   chrome.notifications.create('timeToBreak', {
     type: 'basic',
     iconUrl: '/Eye128.png',
@@ -65,10 +68,11 @@ chrome.notifications.onClosed.addListener(function(timeToBreak) {
 
     //3b: 2nd of 2 things that can mean user has begun the break: clicked "take a break (early)"
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  //using this setup to RECEIVE "true" from popup (re: click "take a break" = true)
-  if (request.method == "takeBreakStatus" && request.data === true) { 
+  //using this setup to listen for RECEIVING "true" from popup (re: click "take a break" = true)
+  if (request.method == "isTakingBreak" && request.data === true) { 
     setCountdownTilScreen();
-      sendResponse({ method: "", data: "" })
+      //sendResponse({ method: "", data: "" })
+      //todo ^is this line necessary?
   }
 });
 
@@ -78,34 +82,31 @@ function setCountdownTilScreen(){
   
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(countdownID);
-  countdown = breakDuration;
-  isTakingBreak = true;
+  currentStatus.countdown = breakDuration;
+  currentStatus.isTakingBreak = true;
 
-  //using this setup to SEND isTakingBreak to popup
+  countdownID = setInterval(() => { //countdown til 0, then reset the timer to 20
+    doScreenCountdown();
+  }, 1000); //(ms) - runs every 1 second
+}
+
+function doScreenCountdown(){
+  console.log("in doScreenCountdown. currentStatus:", currentStatus);
+
+  //using this setup to SEND countdown to popup for display there
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.method == "isBreakStatus") {
-        sendResponse({ method: "", data: isTakingBreak }) 
+    if (request.method == "currentStatus") {
+        sendResponse({ method: "", data: currentStatus }) 
     }
   })
 
-  countdownID = setInterval(() => { //countdown til 0, then reset the timer to 20
-    
-   // console.log ('in setInterval. time til back to work is', countdown);
-    if (countdown > 0) {
-      countdown--;
-    }
-    else {
-      setCountdownTilBreak(countdownID);
-      return;
-    }
-
-    //using this setup to SEND countdown to popup for display there
-    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-      if (request.method == "timeTilBreakOverStatus") {
-          sendResponse({ method: isTakingBreak, data: countdown }) 
-      }
-    })
-  }, 1000); //(ms) - runs every 1 second
+  if (currentStatus.countdown > 0) {
+    currentStatus.countdown--;
+  }
+  else {
+    setCountdownTilBreak(countdownID);
+    return;
+  }
 }
 
 
