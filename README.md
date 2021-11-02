@@ -9,24 +9,24 @@
 ## Screenshot    
 
 Screenshot incoming!
-<!-- ![Screenshot](doeyScreenshot.png) todo -->
+![Screenshot](202020Screenshot.png) 
 
 
 ## Usage
 
-Usage incoming!
-<!-- * todo  --> 
+Install as you would any other Chrome extension:
+[General extension installation instructions](https://support.google.com/chrome_webstore/answer/2664769?hl=en)
+Link to 20-20-20 incoming!
 
 ## Built With
 
-Javascript, HTML, JSON, CSS, and others! 
-<!-- todo -->
+JavaScript, HTML, JSON, CSS, Chrome APIs. Graphics designed in Affinity Designer
 
 
 ## Acknowledgement 
 
-Acknowledgements coming!
-<!-- todo -->
+Thanks to Google for getting me hooked on Chrome extensions with these simple and thorough instructions: [making your first extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/). Many thanks to the various answers on [stackoverflow](https://stackoverflow.com/) that helped me along the way. 
+
 
 
 ## Progress

@@ -28,7 +28,6 @@ function checkStatus(){
     }); 
 
     if(!isTakingBreak) {
-      console.log('not breaking');
       breakButton.show(); //if we're not taking a break, show the 'take a break' button
       breakButton.text("Take A Break Early"); //if it's not time to take a break yet, update this button wording
       
@@ -46,8 +45,6 @@ function checkStatus(){
     }
 
     else {
-      console.log('BREAKTIME');
-
       breakButton.hide(); //if we're already taking a break, hide this button 
       
       //using this setup to RECEIVE timeTilBreakOver from background
@@ -63,6 +60,6 @@ function checkStatus(){
       }); 
     }
 
-  }, 500); 
+  }, 500); //(ms) - runs twice per second
 }
 
