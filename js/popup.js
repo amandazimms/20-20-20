@@ -32,41 +32,41 @@ function updatePopupDOM() {
   //using this setup to RECEIVE isTakingBreak from background
   chrome.runtime.sendMessage({ method: "isBreakStatus", data: "" }, function (res) { 
     isTakingBreak = res.data
-  }); 
-
-
-  if(!isTakingBreak) {
     
-    breakButton.show(); //if we're not taking a break, show the 'take a break' button
-    
-    //using this setup to RECEIVE timeTilBreak from background
-    chrome.runtime.sendMessage({ method: "timeTilBreakStatus", data: "" }, function (res) { 
-      let currentTimer = res.data
-
-      if (currentTimer > 0) {
-        countdownTag.text(`Time until next break: ${currentTimer}`);
-        breakButton.text("Take A Break Early"); //if it's not time to take a break yet, update this button wording
-      }
-      else  {
-        countdownTag.text(`It's time for 20-20-20!`);
-        breakButton.text("Take A Break"); //change the button wording to remove 'early'
-      }
-    }); 
-  }
-
-  else {
-    breakButton.hide(); //if we're already taking a break, hide this button 
-    
-    //using this setup to RECEIVE timeTilBreakOver from background
-    chrome.runtime.sendMessage({ method: "timeTilBreakOverStatus", data: "" }, function (res) { 
-      let currentTimer = res.data
-
-      if (currentTimer > 0)
-        countdownTag.text(`Keep looking for: ${currentTimer}`);
-      else  {
-        countdownTag.text(`Great work! You can now get back to work :)`);
-        breakButton.hide();
-      }
-    }); 
-  }
+    if(!isTakingBreak) {      
+      breakButton.show(); //if we're not taking a break, show the 'take a break' button
+      
+      //using this setup to RECEIVE timeTilBreak from background
+      chrome.runtime.sendMessage({ method: "timeTilBreakStatus", data: "" }, function (res) { 
+        let currentTimer = res.data
+  
+        if (currentTimer > 0) {
+          countdownTag.text(`Time until next break: ${currentTimer}`);
+          breakButton.text("Take A Break Early"); //if it's not time to take a break yet, update this button wording
+        }
+        else  {
+          countdownTag.text(`It's time for 20-20-20!`);
+          breakButton.text("Take A Break"); //change the button wording to remove 'early'
+        }
+      }); 
+    }
+  
+    else {  
+      breakButton.hide(); //if we're already taking a break, hide this button 
+      
+      //using this setup to RECEIVE timeTilBreakOver from background
+      chrome.runtime.sendMessage({ method: "timeTilBreakOverStatus", data: "" }, function (res) { 
+        let currentTimer = res.data
+  
+        if (currentTimer > 0)
+          countdownTag.text(`Keep looking away for: ${currentTimer}`);
+        else  {
+          countdownTag.text(`Great work! You can now get back to work :)`);
+          breakButton.hide();
+        }
+      }); 
+    }
+  
+  })
+  
 }

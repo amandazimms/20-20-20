@@ -1,8 +1,8 @@
 let countdown = 0; //countown - when finished, time to either start or stop taking a break
 let isTakingBreak = false; //BREAK, throughout, refers to looking away, e.g. practicing the '20-20-20' rule
 
-const timeBetweenBreaks = 4; //how long between breaks - 20 minutes = 1200 seconds
-const breakDuration = 3; //how long to take a break - 20 seconds
+const timeBetweenBreaks = 7; //how long between breaks - 20 minutes = 1200 seconds
+const breakDuration = 5; //how long to take a break - 20 seconds
 
 let countdownID; //used to start and stop countdowns
 
@@ -27,7 +27,7 @@ function setCountdownTilBreak(){
 
   countdownID = setInterval(() => { //countdown til 0, then make a notification
     
-    console.log ('in setInterval. time til next break is', countdown);
+   // console.log ('in setInterval. time til next break is', countdown);
     if (countdown > 0) {
       countdown--;
     }
@@ -90,7 +90,7 @@ function setCountdownTilScreen(){
 
   countdownID = setInterval(() => { //countdown til 0, then reset the timer to 20
     
-    console.log ('in setInterval. time til back to work is', countdown);
+   // console.log ('in setInterval. time til back to work is', countdown);
     if (countdown > 0) {
       countdown--;
     }
