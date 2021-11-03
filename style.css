@@ -1,5 +1,25 @@
+* {
+  font-family: 'Fira Sans', sans-serif;
+}
+
 body {
   width: 250px;
+}
+
+.logo {
+  width: 180px;
+  display: inline;
+  margin: auto;
+}
+
+.icon{
+  width: 20px;
+}
+
+.settings {
+  float: right;
+  margin: 10px 10px 0 0;
+
 }
 
 #toggleOutput {

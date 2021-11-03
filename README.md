@@ -7,7 +7,7 @@
 
 
 ## Screenshot    
-![Screenshot](202020Screenshot.png) 
+![Screenshot](/images/202020Screenshot.png) 
 
 
 ## Usage

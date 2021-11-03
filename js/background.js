@@ -48,7 +48,7 @@ function doBreakCountdown(){ //actual countdown
 function makeBreakNotification(){
   chrome.notifications.create('timeToBreak', {
     type: 'basic',
-    iconUrl: '/Eye128.png',
+    iconUrl: '/images/Eye128.png',
     title: "It's Time for an Eye Break!",
     message: 'Close this when you begin your 20-second break',
     priority: 2
