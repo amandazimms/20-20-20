@@ -41,7 +41,7 @@ function updatePopupDOM() {
         breakButton.text("Take A Break Early"); //if it's not time to take a break yet, update this button wording
       }
       else  {
-        countdownTag.text(`It's time for 20-20-20!`);
+        countdownTag.text(`It's time for twenty!`);
         breakButton.text("Take A Break"); //change the button wording to remove 'early'
       } 
     }

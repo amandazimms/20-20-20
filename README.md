@@ -1,9 +1,9 @@
-# 20-20-20
+# Twenty
 
 
 ## Description
 
-20-20-20 is a Chrome extension that helps you avoid eye strain! Did you know that [opthamologists recommend](https://advancedeyecaremd.net/20-20-20-tipstopreventeyestrain/) that during long periods of screen use, we look at something 20 feet away, every 20 minutes, for 20 seconds? The 20-20-20 rule has helped me personally with eye strain, and it also provides a great opportunity to take a small step back from your work and gather your thoughts. 
+Twenty is a Chrome extension that helps you avoid eye strain! Did you know that [opthamologists recommend](https://advancedeyecaremd.net/20-20-20-tipstopreventeyestrain/) that during long periods of screen use, we look at something 20 feet away, every 20 minutes, for 20 seconds? The 20-20-20 rule has helped me personally with eye strain, and it also provides a great opportunity to take a small step back from your work and gather your thoughts. 
 
 
 ## Screenshot    
@@ -14,7 +14,7 @@
 
 Install as you would any other Chrome extension:
 - [General extension installation instructions](https://support.google.com/chrome_webstore/answer/2664769?hl=en).
-- Link to 20-20-20 extension incoming!
+- Link to live Twenty extension incoming!
 
 ## Built With
 
@@ -44,7 +44,7 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 ### Phase 4 - polish and additional features:
 - [ ] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?
 - [ ] add a pause button - see toucan toggle
-- [ ] add link to 20-20-20 info in popup
+- [ ] add link to 20-20-20 rule info in popup
 
 ### Stretch goals
 - [ ] expand functionality for other types of breaks - stretching, water, exercise, sit/stand desk, etc?
