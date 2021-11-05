@@ -8,7 +8,7 @@ body {
 }
 
 header {
-  background-color: rgb(245, 243, 239);
+  background-color: #F4F7EE;
   padding: 10px 10px 5px 10px;
 }
 
@@ -17,19 +17,37 @@ header {
 }
 
 .logo {
-  width: 180px;
+  width: 150px;
   display: inline;
   margin: auto;
 }
 
+.navIcons{
+  float: right;
+  margin: 10px 10px 0 0;
+}
+
 .icon{
   width: 20px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+.home {
+
 }
 
 .settings {
-  float: right;
-  margin: 10px 10px 0 0;
 
+}
+
+button {
+	background: none;
+	background-color: rgb(152, 190, 81);
+	border: none;
+	padding: 10px;
+	outline: inherit;
+  border-radius: 8px;
 }
 
 #toggleOutput {
