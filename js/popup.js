@@ -28,7 +28,6 @@ workSlider.on('input', function () {
 
 workSlider.on('change', function () {
   //change fires only after mouse is released
-  
   chrome.runtime.sendMessage({ method: "changeSettings", data: [ 'work', $(this).val() ] }, function (res) {
     return true;
   });
@@ -40,7 +39,6 @@ breakSlider.on('input', function () {
 
 breakSlider.on('change', function () {
   //change fires only after mouse is released
-  
   chrome.runtime.sendMessage({ method: "changeSettings", data: [ 'break', $(this).val() ] }, function (res) {
     return true;
   });
@@ -85,7 +83,7 @@ function updatePopupDOM() {
       breakButton.show(); //if we're not taking a break, show the 'take a break' button
         
       if (currentTimer > 0) {
-        countdownTag.text(`Time until next break: ${currentTimer}`);
+        countdownTag.text(`Time until next break: ${currentTimer}:32`);
         breakButton.text("Take A Break Early"); //if it's not time to take a break yet, update this button wording
       }
       else  {
@@ -97,7 +95,7 @@ function updatePopupDOM() {
     else {breakButton.hide(); //if we're already taking a break, hide this button 
       
       if (currentTimer > 0)
-        countdownTag.text(`Keep looking away for: ${currentTimer}`);
+        countdownTag.text(`Keep looking away for: ${currentTimer}:32`);
       else  {
         countdownTag.text(`Great work! You can now get back to work :)`);
         breakButton.hide();
