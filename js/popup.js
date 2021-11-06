@@ -2,11 +2,30 @@ let outputArea = $('#outputArea');
 let countdownTag = $('#countdownTag');
 let breakButton = $('#breakButton');
 
+let settingsIcom = $('#settingsIcon');
+let settingsArea = $('#settingsArea');
+
+let homeIcom = $('#homeIcon');
+let homeArea = $('#homeArea');
+
+
 $( document ).ready( function(){
   updatePopupDOM();
   checkStatus();
   breakButton.on('click', takeBreak);
+  settingsIcom.on('click', openSettings);
+  homeIcom.on('click', openHome);
 });
+
+function openSettings(){
+  homeArea.hide();
+  settingsArea.show();
+}
+
+function openHome(){
+  settingsArea.hide();
+  homeArea.show();
+}
 
 function takeBreak(){ 
   //runs when user clicks "take a break (early)"
