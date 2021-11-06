@@ -18,6 +18,10 @@ header {
   padding: 10px;
 }
 
+#settingsArea {
+  display: none;
+}
+
 .logo {
   width: 150px;
   display: inline;

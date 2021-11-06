@@ -4,9 +4,23 @@ let breakButton = $('#breakButton');
 
 let settingsIcom = $('#settingsIcon');
 let settingsArea = $('#settingsArea');
+let workSlider = $('#workDuration');
+let workSliderVal = $('#workDurationValue');
+let breakSlider = $('#breakDuration');
+let breakSliderVal = $('#breakDurationValue');
 
 let homeIcom = $('#homeIcon');
 let homeArea = $('#homeArea');
+
+
+
+// <label for="workDuration">Work Duration:</label>
+// <input type="range" id="workDuration" min="1" max="120"/>
+// <p id="workDurationValue">0</p>
+
+// <label for="breakDuration">Break Duration:</label>
+// <input type="range" id="breakDuration" min="1" max="120"/>
+// <p id="breakDurationValue">0</p>
 
 
 $( document ).ready( function(){
@@ -16,6 +30,15 @@ $( document ).ready( function(){
   settingsIcom.on('click', openSettings);
   homeIcom.on('click', openHome);
 });
+
+workSlider.on('input change', function () {
+  workSliderVal.html(`${$(this).val()} minutes`);
+});
+
+breakSlider.on('input change', function () {
+  breakSliderVal.html(`${$(this).val()} seconds`);
+});
+
 
 function openSettings(){
   homeArea.hide();
