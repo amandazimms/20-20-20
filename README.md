@@ -46,6 +46,8 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [ ] style settings sliders to match the rest of the popup
 - [ ] update home icon to something more like a timer/clock
 - [ ] research other extensions - need to add a description / homepage? maybe a ? icon 'about' type page next to the settings and timer?
+- [ ] make button clickier feeling
+- [ ] update 128/48/32/16 images
 
 ### Phase 4 - polish and additional features:
 - [ ] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?
