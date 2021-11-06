@@ -9,6 +9,17 @@ const breakDuration = 5; //how long to take a break - 20 seconds
 let countdownID; //used to start and stop countdowns
 
 
+// //PHASE 0: MAY happen anytime - user changes settings.
+// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+//   //listen for RECEIVING breakDuration and workDuration values from popup
+//   console.log("!!");
+//   if (request.method == "changeSettings") { 
+//     console.log('workDuration:', request.data);
+//     sendResponse({ method: "", data: "" }); 
+//   }
+// });
+
+
 setCountdownTilBreak();
 
 //PHASE 1: START the first timer, WAIT til user is ready to look away from the screen

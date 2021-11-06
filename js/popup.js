@@ -13,16 +13,6 @@ let homeIcom = $('#homeIcon');
 let homeArea = $('#homeArea');
 
 
-
-// <label for="workDuration">Work Duration:</label>
-// <input type="range" id="workDuration" min="1" max="120"/>
-// <p id="workDurationValue">0</p>
-
-// <label for="breakDuration">Break Duration:</label>
-// <input type="range" id="breakDuration" min="1" max="120"/>
-// <p id="breakDurationValue">0</p>
-
-
 $( document ).ready( function(){
   updatePopupDOM();
   checkStatus();
@@ -31,11 +21,20 @@ $( document ).ready( function(){
   homeIcom.on('click', openHome);
 });
 
-workSlider.on('input change', function () {
+workSlider.on('input', function () {
+  //input fires constantly, i.e. while mouse is still down the value will change
   workSliderVal.html(`${$(this).val()} minutes`);
 });
 
-breakSlider.on('input change', function () {
+workSlider.on('change', function () {
+  //change fires only after mouse is released
+  console.log('!');
+  // chrome.runtime.sendMessage({ method: "changeSettings", data: ""}, function (res) {
+  //   return true;
+  // });
+});
+
+breakSlider.on('input', function () {
   breakSliderVal.html(`${$(this).val()} seconds`);
 });
 
