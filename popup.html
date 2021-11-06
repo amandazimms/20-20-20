@@ -28,14 +28,15 @@
       </div>
 
       <div id="settingsArea">
+        <h3>Settings</h3>
 
-        <label for="workDuration">Work Duration:</label>
-        <input type="range" id="workDuration" min="1" max="120" step="1" value="20"/>
-        <p id="workDurationValue">20 seconds</p>
+        <h4 class="settingsTitle">Work Duration:</h4>
+        <input type="range" id="workDuration" class="slider" min="1" max="120" step="1" value="20"/>
+        <p id="workDurationValue" class="settingsLabel">20</p><p class="settingsLabel timeUnitActive" id="workSeconds">seconds</p><p class="settingsLabel timeUnitInactive" id="workMinutes">minutes</p>
 
-        <label for="breakDuration">Break Duration:</label>
-        <input type="range" id="breakDuration" min="1" max="120" step="1" value="20"/>
-        <p id="breakDurationValue">20 seconds</p>
+        <h4 class="settingsTitle">Break Duration:</h4>
+        <input type="range" id="breakDuration" class="slider" min="1" max="120" step="1" value="20"/>
+        <p id="breakDurationValue" class="settingsLabel">20</p><p class="settingsLabel timeUnitActive" id="breakSeconds">seconds</p><p class="settingsLabel timeUnitInactive" id="breakMinutes">minutes</p>
 
       </div>
     </div> 

@@ -4,10 +4,18 @@ let breakButton = $('#breakButton');
 
 let settingsIcom = $('#settingsIcon');
 let settingsArea = $('#settingsArea');
+
 let workSlider = $('#workDuration');
 let workSliderVal = $('#workDurationValue');
+let workSeconds = $('#workSeconds');
+let workMinutes = $('#workMinutes')
+let currentWorkTimeUnit = 'workSeconds';
+
 let breakSlider = $('#breakDuration');
 let breakSliderVal = $('#breakDurationValue');
+let breakSeconds = $('#breakSeconds');
+let breakMinutes = $('#breakMinutes')
+let currentBreakTimeUnit = 'breakSeconds';
 
 let homeIcom = $('#homeIcon');
 let homeArea = $('#homeArea');
@@ -19,11 +27,41 @@ $( document ).ready( function(){
   breakButton.on('click', takeBreak);
   settingsIcom.on('click', openSettings);
   homeIcom.on('click', openHome);
+  workSeconds.on('click', {param: 'workMinutes'}, toggleWorkTimeUnit); 
+  workMinutes.on('click', {param: 'workSeconds'}, toggleWorkTimeUnit); 
+  breakSeconds.on('click', {param: 'breakMinutes'}, toggleBreakTimeUnit); 
+  breakMinutes.on('click', {param: 'breakSeconds'}, toggleBreakTimeUnit); 
 });
+
+function toggleWorkTimeUnit (oppositeTimeUnit){ 
+  let clicked = this.id;
+  let notClicked = oppositeTimeUnit.data.param;
+
+  if (currentWorkTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
+    currentWorkTimeUnit = clicked;
+    $(this).addClass('timeUnitActive');
+    $(this).removeClass('timeUnitInactive');
+    $(`#${notClicked}`).addClass('timeUnitInactive');
+    $(`#${notClicked}`).removeClass('timeUnitActive');
+  }
+}
+
+function toggleBreakTimeUnit (oppositeTimeUnit){ 
+  let clicked = this.id;
+  let notClicked = oppositeTimeUnit.data.param;
+
+  if (currentBreakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
+    currentBreakTimeUnit = clicked;
+    $(this).addClass('timeUnitActive');
+    $(this).removeClass('timeUnitInactive');
+    $(`#${notClicked}`).addClass('timeUnitInactive');
+    $(`#${notClicked}`).removeClass('timeUnitActive');
+  }
+}
 
 workSlider.on('input', function () {
   //input fires constantly, i.e. while mouse is still down the value will change
-  workSliderVal.html(`${$(this).val()} seconds`);
+  workSliderVal.html(`${$(this).val()}`);
 });
 
 workSlider.on('change', function () {
@@ -34,7 +72,7 @@ workSlider.on('change', function () {
 });
 
 breakSlider.on('input', function () {
-  breakSliderVal.html(`${$(this).val()} seconds`);
+  breakSliderVal.html(`${$(this).val()}`);
 });
 
 breakSlider.on('change', function () {
