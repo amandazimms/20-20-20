@@ -28,10 +28,11 @@ workSlider.on('input', function () {
 
 workSlider.on('change', function () {
   //change fires only after mouse is released
-  console.log('!');
-  // chrome.runtime.sendMessage({ method: "changeSettings", data: ""}, function (res) {
-  //   return true;
-  // });
+
+  chrome.runtime.sendMessage({ method: "changeSettings", data: { timeBetweenBreaks: $(this).val(), breakDuration: 5 } }, function (res) {
+    console.log('sending via change settings');
+    return true;
+  });
 });
 
 breakSlider.on('input', function () {
@@ -68,13 +69,12 @@ function checkStatus(){
 
 
 function updatePopupDOM() {
-
   //using this setup to RECEIVE isTakingBreak from background
   chrome.runtime.sendMessage({ method: "currentStatus", data: "" }, function (res) { 
     let isTakingBreak = res.data.isTakingBreak;
     let currentTimer = res.data.countdown;
 
-    if(!isTakingBreak) {      
+    if(!isTakingBreak) {   
       breakButton.show(); //if we're not taking a break, show the 'take a break' button
         
       if (currentTimer > 0) {
@@ -87,8 +87,7 @@ function updatePopupDOM() {
       } 
     }
   
-    else {  
-      breakButton.hide(); //if we're already taking a break, hide this button 
+    else {breakButton.hide(); //if we're already taking a break, hide this button 
       
       if (currentTimer > 0)
         countdownTag.text(`Keep looking away for: ${currentTimer}`);
