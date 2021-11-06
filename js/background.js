@@ -4,8 +4,8 @@ let currentStatus = { //object that be sent to popup.js every second.
 }; 
 
 let currentSettings = {
-  timeBetweenBreaks: 7, //how long between breaks - 20 minutes = 1200 seconds
-  breakDuration: 5 //how long to take a break - 20 seconds
+  workDuration: 7, //in SECONDS, how long between breaks - 20 minutes = 1200 seconds
+  breakDuration: 5 //in SECONDS, how long to take a break - 20 seconds
 }
 
 let countdownID; //used to start and stop countdowns
@@ -16,20 +16,25 @@ setCountdownTilBreak();
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
   if (request.method == "changeSettings"){
-    currentSettings = request.data;
+
+    if (request.data[0] == "work") 
+      currentSettings = { ...currentSettings, workDuration: request.data[1] };
+    else if (request.data[0] == "break") 
+      currentSettings = { ...currentSettings, breakDuration: request.data[1] };
+
     console.log('current Settings:', currentSettings);
     return true;
   }
 });
 
-//PHASE 1: START the first timer, WAIT til user is ready to look away from the screen
+//PHASE 1: START the first timer, WAIT while user works, til ready to look away from the screen
 function setCountdownTilBreak(){
-  //function that counts down until time to break (runs while user is looking at screen for 20 min)
+  //function that counts down until time to break (runs while user is working for 20 min)
   
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(countdownID);
   chrome.notifications.clear('timeToBreak');
-  currentStatus.countdown = currentSettings.timeBetweenBreaks;
+  currentStatus.countdown = currentSettings.workDuration;
   currentStatus.isTakingBreak = false;
 
   countdownID = setInterval(() => { 
@@ -69,22 +74,21 @@ function makeBreakNotification(){
 //PHASE 3: WAIT until user indicates they got the memo and are ready to take a break
     //3a: 1st of 2 things that can mean user has begun the break: clicked to clear notification
 chrome.notifications.onClosed.addListener(function(timeToBreak) {
-  setCountdownTilScreen();
+  setCountdownTilWork();
 });
     //3b: 2nd of 2 things that can mean user has begun the break: clicked "take a break (early)"
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   //listen for RECEIVING "true" from popup (re: click "take a break" = true)
-  
   if (request.method == "isTakingBreak" && request.data === true) { 
-    setCountdownTilScreen();
+    setCountdownTilWork();
     sendResponse({ method: "", data: currentStatus }); 
     return true;
   } 
 });
 
 
-//PHASE 4: START countown until screen time begins (i.e. until break is over)
-function setCountdownTilScreen(){
+//PHASE 4: START countown until work time begins (i.e. until break is over)
+function setCountdownTilWork(){
   //function that counts down until break is over (runs while user is looking away for 20 sec)
   
   //start by initializing timer, clearing notifications and previously running timers

@@ -23,20 +23,27 @@ $( document ).ready( function(){
 
 workSlider.on('input', function () {
   //input fires constantly, i.e. while mouse is still down the value will change
-  workSliderVal.html(`${$(this).val()} minutes`);
+  workSliderVal.html(`${$(this).val()} seconds`);
 });
 
 workSlider.on('change', function () {
   //change fires only after mouse is released
-
-  chrome.runtime.sendMessage({ method: "changeSettings", data: { timeBetweenBreaks: $(this).val(), breakDuration: 5 } }, function (res) {
-    console.log('sending via change settings');
+  
+  chrome.runtime.sendMessage({ method: "changeSettings", data: [ 'work', $(this).val() ] }, function (res) {
     return true;
   });
 });
 
 breakSlider.on('input', function () {
   breakSliderVal.html(`${$(this).val()} seconds`);
+});
+
+breakSlider.on('change', function () {
+  //change fires only after mouse is released
+  
+  chrome.runtime.sendMessage({ method: "changeSettings", data: [ 'break', $(this).val() ] }, function (res) {
+    return true;
+  });
 });
 
 
