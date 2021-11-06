@@ -33,13 +33,16 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [x] when notification is closed, restart timer
 - [x] display timer count on popup
 - [x] display a message on the popup
+- [x] add customization: ability to define duration of break and work times
+- [ ] expand customization: minutes or seconds toggle
 
 
 ### Phase 3 - styling and UX:
 - [x] add more instructions/feedback for user: e.g. when 'take a break' is clicked, should include a note about how to do 20-20-20, then *wait 20 sec*, then start the 20 min timer. 
-- [ ] add title and logo to popup and style
-- [ ] add description to popup and style
-- [ ] style popup button
+- [x] add title and logo to popup and style
+- [x] style popup button
+- [ ] update home icon to something more like a timer/clock
+- [ ] research other extensions - need to add a description / homepage? maybe a ? icon 'about' type page next to the settings and timer?
 
 ### Phase 4 - polish and additional features:
 - [ ] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?
