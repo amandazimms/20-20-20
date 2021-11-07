@@ -27,38 +27,41 @@ $( document ).ready( function(){
   breakButton.on('click', takeBreak);
   settingsIcom.on('click', openSettings);
   homeIcom.on('click', openHome);
-  workSeconds.on('click', {param: 'workMinutes'}, toggleWorkTimeUnit); 
-  workMinutes.on('click', {param: 'workSeconds'}, toggleWorkTimeUnit); 
-  breakSeconds.on('click', {param: 'breakMinutes'}, toggleBreakTimeUnit); 
-  breakMinutes.on('click', {param: 'breakSeconds'}, toggleBreakTimeUnit); 
+  workSeconds.on('click', {timeParam: 'workMinutes'}, toggleWorkTimeUnit); 
+  workMinutes.on('click', {timeParam: 'workSeconds'}, toggleWorkTimeUnit); 
+  breakSeconds.on('click', {timeParam: 'breakMinutes'}, toggleBreakTimeUnit); 
+  breakMinutes.on('click', {timeParam: 'breakSeconds'}, toggleBreakTimeUnit); 
 });
 
 function toggleWorkTimeUnit (oppositeTimeUnit){ 
-  let clicked = this.id;
-  let notClicked = oppositeTimeUnit.data.param;
+  let clicked = this.id; //unit of time that was clicked (seconds or minutes)
+  let notClicked = oppositeTimeUnit.data.timeParam; //unit of time that was NOT clicked (seconds or minutes)
 
   if (currentWorkTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentWorkTimeUnit = clicked;
-    $(this).addClass('timeUnitActive');
-    $(this).removeClass('timeUnitInactive');
-    $(`#${notClicked}`).addClass('timeUnitInactive');
-    $(`#${notClicked}`).removeClass('timeUnitActive');
+    toggleSettingsCSS(this, notClicked);
   }
 }
 
 function toggleBreakTimeUnit (oppositeTimeUnit){ 
-  let clicked = this.id;
-  let notClicked = oppositeTimeUnit.data.param;
+  let clicked = this.id; //unit of time that was clicked (seconds or minutes)
+  let notClicked = oppositeTimeUnit.data.timeParam; //unit of time that was NOT clicked (seconds or minutes)
 
   if (currentBreakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentBreakTimeUnit = clicked;
-    $(this).addClass('timeUnitActive');
-    $(this).removeClass('timeUnitInactive');
-    $(`#${notClicked}`).addClass('timeUnitInactive');
-    $(`#${notClicked}`).removeClass('timeUnitActive');
+    toggleSettingsCSS(this, notClicked);
   }
 }
 
+function toggleSettingsCSS(clicked, notClicked){
+  //helper that keeps toggleXTimeUnit functions DRY - flip CSS classes for minutes/seconds on settings toggle
+  $(clicked).addClass('timeUnitActive');
+  $(clicked).removeClass('timeUnitInactive');
+  $(`#${notClicked}`).addClass('timeUnitInactive');
+  $(`#${notClicked}`).removeClass('timeUnitActive');
+}
+
+//todo on refactor day - combine these xSlider.on'input' and xSlider.on'change functions = DRYer
 workSlider.on('input', function () {
   //input fires constantly, i.e. while mouse is still down the value will change
   workSliderVal.html(`${$(this).val()}`);
@@ -72,6 +75,7 @@ workSlider.on('change', function () {
 });
 
 breakSlider.on('input', function () {
+  //input fires constantly, i.e. while mouse is still down the value will change
   breakSliderVal.html(`${$(this).val()}`);
 });
 
@@ -81,7 +85,6 @@ breakSlider.on('change', function () {
     return true;
   });
 });
-
 
 function openSettings(){
   homeArea.hide();
