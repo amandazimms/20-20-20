@@ -61,6 +61,12 @@ function toggleSettingsCSS(clicked, notClicked){
   $(`#${notClicked}`).removeClass('timeUnitActive');
 }
 
+function sendDataToBG(_method, _data){
+  chrome.runtime.sendMessage({ method: _method, data: _data }, function (res) {
+    return true;
+  });
+}
+
 //todo on refactor day - combine these xSlider.on'input' and xSlider.on'change functions = DRYer
 workSlider.on('input', function () {
   //input fires constantly, i.e. while mouse is still down the value will change
@@ -69,10 +75,9 @@ workSlider.on('input', function () {
 
 workSlider.on('change', function () {
   //change fires only after mouse is released
-  chrome.runtime.sendMessage({ method: "changeSettings", data: [ 'work', $(this).val() ] }, function (res) {
-    return true;
-  });
+  sendDataToBG("changeSettings", { workDuration: +$(this).val() });
 });
+
 
 breakSlider.on('input', function () {
   //input fires constantly, i.e. while mouse is still down the value will change
@@ -81,9 +86,7 @@ breakSlider.on('input', function () {
 
 breakSlider.on('change', function () {
   //change fires only after mouse is released
-  chrome.runtime.sendMessage({ method: "changeSettings", data: [ 'break', $(this).val() ] }, function (res) {
-    return true;
-  });
+  sendDataToBG("changeSettings", { breakDuration: +$(this).val() });
 });
 
 function openSettings(){

@@ -5,23 +5,21 @@ let currentStatus = { //object that be sent to popup.js every second.
 
 let currentSettings = {
   workDuration: 7, //in SECONDS, how long between breaks - 20 minutes = 1200 seconds
-  breakDuration: 5 //in SECONDS, how long to take a break - 20 seconds
+  workTimeUnit: 'seconds',
+  breakDuration: 5, //in SECONDS, how long to take a break - 20 seconds
+  breakTimeUnit: 'seconds'
 }
 
 let countdownID; //used to start and stop countdowns
 
 setCountdownTilBreak();
 
+//todo on refactor day: have one onMessage.addListener at the top of the script. Parcel out the logic inside each into their own function.
+
 //PHASE 0: IF the user changes settings at any point in popup, import them here and make them official.
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-
   if (request.method == "changeSettings"){
-
-    if (request.data[0] == "work") 
-      currentSettings = { ...currentSettings, workDuration: request.data[1] };
-    else if (request.data[0] == "break") 
-      currentSettings = { ...currentSettings, breakDuration: request.data[1] };
-
+    currentSettings = { ...currentSettings, ...request.data };
     setCountdownTilBreak(); //restart timer so new changes begin now
     return true;
   }
