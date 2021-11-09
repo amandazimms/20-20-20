@@ -29,14 +29,15 @@ $( document ).ready( function(){
   breakButton.on('click', takeBreak);
   settingsIcom.on('click', openSettings);
   homeIcom.on('click', openHome);
-  workSeconds.on('click', {thisParam: 'seconds'}, toggleWorkTimeUnit); 
-  workMinutes.on('click', {thisParam: 'minutes'}, toggleWorkTimeUnit); 
-  breakSeconds.on('click', {thisParam: 'seconds'}, toggleBreakTimeUnit); 
-  breakMinutes.on('click', {thisParam: 'minutes'}, toggleBreakTimeUnit); 
+  workSeconds.on('click', {clicked: 'seconds'}, toggleWorkTimeUnit); 
+  workMinutes.on('click', {clicked: 'minutes'}, toggleWorkTimeUnit); 
+  breakSeconds.on('click', {clicked: 'seconds'}, toggleBreakTimeUnit); 
+  breakMinutes.on('click', {clicked: 'minutes'}, toggleBreakTimeUnit); 
 });
 
+
 function toggleWorkTimeUnit (timeUnit){ 
-  let clicked = timeUnit.data.thisParam; //unit of time that was clicked (seconds or minutes)
+  let clicked = timeUnit.data.clicked; //unit of time that was clicked (seconds or minutes)
 
   if (currentWorkTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentWorkTimeUnit = clicked;
@@ -46,7 +47,7 @@ function toggleWorkTimeUnit (timeUnit){
 }
 
 function toggleBreakTimeUnit (timeUnit){ 
-  let clicked = timeUnit.data.thisParam; //unit of time that was clicked (seconds or minutes)
+  let clicked = timeUnit.data.clicked; //unit of time that was clicked (seconds or minutes)
 
   if (currentBreakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentBreakTimeUnit = clicked;
