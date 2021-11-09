@@ -4,9 +4,9 @@ let currentStatus = { //object that be sent to popup.js every second.
 }; 
 
 let currentSettings = {
-  workDuration: 7, //in SECONDS, how long between breaks - 20 minutes = 1200 seconds
-  workTimeUnit: 'seconds',
-  breakDuration: 5, //in SECONDS, how long to take a break - 20 seconds
+  workDuration: 20, //in {workTimeUnit}s, how long between breaks? - 20 minutes = 1200 seconds
+  workTimeUnit: 'minutes',
+  breakDuration: 20, //in {breakTimeUnit}s, how long to take a break - 20 seconds
   breakTimeUnit: 'seconds'
 }
 

@@ -36,7 +36,7 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [x] display timer count on popup
 - [x] display a message on the popup
 - [x] add customization: ability to define duration of break and work times
-- [ ] expand customization: minutes or seconds toggle
+- [x] expand customization: minutes or seconds toggle
 - [ ] debug issue with sendMessage timeout
 
 ### Phase 3 - styling and UX:
