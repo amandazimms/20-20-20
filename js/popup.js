@@ -132,7 +132,7 @@ function updatePopupDOM() {
       breakButton.show(); //if we're not taking a break, show the 'take a break' button
         
       if (currentTimer > 0) {
-        countdownTag.text(`Time until next break: ${currentTimer}`);
+        countdownTag.text(`Time until next break: ${clockTime.getMinutes()}:${clockTime.getSeconds()}`);
         breakButton.text("Take A Break Early"); //if it's not time to take a break yet, update this button wording
       }
       else  {

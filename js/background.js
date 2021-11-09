@@ -53,8 +53,9 @@ function doBreakCountdown(){ //actual countdown
       }
     })
 
-    if (currentStatus.countdown > 0)
+    if (currentStatus.countdown > 0){
       currentStatus.countdown--;
+    }
     else { //when countdown reaches 0, stop this setInterval and make a notification
       makeBreakNotification();
       clearInterval(countdownID);
