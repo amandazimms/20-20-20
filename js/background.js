@@ -20,6 +20,7 @@ setCountdownTilBreak();
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.method == "changeSettings"){
     currentSettings = { ...currentSettings, ...request.data };
+    console.log('current Settings:', currentSettings);
     setCountdownTilBreak(); //restart timer so new changes begin now
     return true;
   }
