@@ -9,13 +9,15 @@ let workSlider = $('#workDuration');
 let workSliderVal = $('#workDurationValue');
 let workSeconds = $('#workSeconds');
 let workMinutes = $('#workMinutes')
-let currentWorkTimeUnit = 'workSeconds';
+let workTimeUnits = [workSeconds, workMinutes];
+let currentWorkTimeUnit = 'seconds';
 
 let breakSlider = $('#breakDuration');
 let breakSliderVal = $('#breakDurationValue');
 let breakSeconds = $('#breakSeconds');
 let breakMinutes = $('#breakMinutes')
-let currentBreakTimeUnit = 'breakSeconds';
+let breakTimeUnits = [breakSeconds, breakMinutes];
+let currentBreakTimeUnit = 'seconds';
 
 let homeIcom = $('#homeIcon');
 let homeArea = $('#homeArea');
@@ -27,45 +29,40 @@ $( document ).ready( function(){
   breakButton.on('click', takeBreak);
   settingsIcom.on('click', openSettings);
   homeIcom.on('click', openHome);
-  workSeconds.on('click', {thisParam: 'seconds', oppositeParam: 'minutes'}, toggleWorkTimeUnit); 
-  workMinutes.on('click', {thisParam: 'minutes', oppositeParam: 'seconds'}, toggleWorkTimeUnit); 
-  breakSeconds.on('click', {thisParam: 'seconds', oppositeParam: 'minutes'}, toggleBreakTimeUnit); 
-  breakMinutes.on('click', {thisParam: 'minutes', oppositeParam: 'seconds'}, toggleBreakTimeUnit); 
+  workSeconds.on('click', {thisParam: 'seconds'}, toggleWorkTimeUnit); 
+  workMinutes.on('click', {thisParam: 'minutes'}, toggleWorkTimeUnit); 
+  breakSeconds.on('click', {thisParam: 'seconds'}, toggleBreakTimeUnit); 
+  breakMinutes.on('click', {thisParam: 'minutes'}, toggleBreakTimeUnit); 
 });
 
 function toggleWorkTimeUnit (timeUnit){ 
-  // console.log('timeUnit.data:', timeUnit.data);
-  // console.log( "timeUnit.data.thisParam:", timeUnit.data.thisParam);
-  // console.log( "timeUnit.data.oppositeParam:", timeUnit.data.oppositeParam);
-
   let clicked = timeUnit.data.thisParam; //unit of time that was clicked (seconds or minutes)
-  let notClicked = timeUnit.data.oppositeParam; //unit of time that was NOT clicked (seconds or minutes)
 
-  console.log('clicked: ', clicked, 'not clicked:', notClicked);
   if (currentWorkTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentWorkTimeUnit = clicked;
     sendDataToBG("changeSettings", { workTimeUnit: currentWorkTimeUnit });
-    toggleSettingsCSS(this, notClicked);
+    toggleSettingsCSS(this, workTimeUnits);
   }
 }
 
-function toggleBreakTimeUnit (oppositeTimeUnit){ 
-  let clicked = this.id; //unit of time that was clicked (seconds or minutes)
-  let notClicked = oppositeTimeUnit.data.timeParam; //unit of time that was NOT clicked (seconds or minutes)
+function toggleBreakTimeUnit (timeUnit){ 
+  let clicked = timeUnit.data.thisParam; //unit of time that was clicked (seconds or minutes)
 
   if (currentBreakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentBreakTimeUnit = clicked;
     sendDataToBG("changeSettings", { breakTimeUnit: currentBreakTimeUnit });
-    toggleSettingsCSS(this, notClicked);
+    toggleSettingsCSS(this, breakTimeUnits);
   }
 }
 
-function toggleSettingsCSS(clicked, notClicked){
+function toggleSettingsCSS(clickedElement, elementList){
   //helper that keeps toggleXTimeUnit functions DRY - flip CSS classes for minutes/seconds on settings toggle
-  $(clicked).addClass('timeUnitActive');
-  $(clicked).removeClass('timeUnitInactive');
-  $(`#${notClicked}`).addClass('timeUnitInactive');
-  $(`#${notClicked}`).removeClass('timeUnitActive');
+  for(const element of elementList){ //make all elements inactive
+    element.addClass('timeUnitInactive');
+    element.removeClass('timeUnitActive');
+  }
+  $(clickedElement).addClass('timeUnitActive'); //activate only our clicked element
+  $(clickedElement).removeClass('timeUnitInactive');
 }
 
 function sendDataToBG(_method, _data){
