@@ -19,8 +19,9 @@ setCountdownTilBreak();
 //PHASE 0: IF the user changes settings at any point in popup, import them here and make them official.
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.method == "changeSettings"){
+    console.log('req.data', request.data);
     currentSettings = { ...currentSettings, ...request.data };
-    console.log('current Settings:', currentSettings);
+
     setCountdownTilBreak(); //restart timer so new changes begin now
     return true;
   }
@@ -31,6 +32,10 @@ function setCountdownTilBreak(){
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(countdownID);
   chrome.notifications.clear('timeToBreak');
+
+  if (currentSettings.workTimeUnit == 'minutes')
+    currentSettings.workDuration *= 60; //convert to seconds
+
   currentStatus.countdown = currentSettings.workDuration;
   currentStatus.isTakingBreak = false;
 
@@ -89,6 +94,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 function setCountdownTilWork(){  
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(countdownID);
+
+  if (currentSettings.breakTimeUnit == 'minutes')
+    currentSettings.breakDuration *= 60; //convert to seconds
+
   currentStatus.countdown = currentSettings.breakDuration;
   currentStatus.isTakingBreak = true;
 
