@@ -1,4 +1,4 @@
-let outputArea = $('#outputArea');
+let titleStatus = $('#titleStatus');
 let countdownTag = $('#countdownTag');
 let breakButton = $('#breakButton');
 
@@ -136,12 +136,14 @@ function updatePopupDOM() {
       breakButton.show(); //if we're not taking a break, show the 'take a break' button
         
       if (currentTimer > 0) {
+        titleStatus.text(`It's Work Time`);
         countdownTag.text(`Time until next break: ${minutes}:${seconds}`);
-        breakButton.text("Take A Break Early"); //if it's not time to take a break yet, update this button wording
+        breakButton.text(`Take A Break Early`); //if it's not time to take a break yet, update this button wording
       }
       else  {
-        countdownTag.text(`It's time for twenty!`);
-        breakButton.text("Take A Break"); //change the button wording to remove 'early'
+        titleStatus.text(`It's Break Time`);
+        countdownTag.text(`It's time for a break!`);
+        breakButton.text(`Take A Break`); //change the button wording to remove 'early'
       } 
     }
   
@@ -150,7 +152,7 @@ function updatePopupDOM() {
       if (currentTimer > 0)
         countdownTag.text(`Keep looking away for: ${currentTimer}`);
       else  {
-        countdownTag.text(`Great work! You can now get back to work :)`);
+        //countdownTag.text(`Great work! You can now get back to work :)`);
         breakButton.hide();
       }
     }
