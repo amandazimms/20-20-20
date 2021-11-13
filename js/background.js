@@ -1,6 +1,7 @@
 let currentStatus = { //object that be sent to popup.js every second.
   isTakingBreak: false, //BREAK, throughout, refers to looking away, e.g. practicing the '20-20-20' rule
-  countdown: 0  //countown - when finished, time to either start or stop taking a break
+  countdown: 0,  //countown - when finished, time to either start or stop taking a break
+  totalBreaks: 0
 }; 
 
 let currentSettings = {
@@ -77,6 +78,8 @@ function makeBreakNotification(){
     //3a: either by clicking to close notification
 chrome.notifications.onClosed.addListener(function(timeToBreak) {
   setCountdownTilWork();
+  currentStatus.totalBreaks++;
+  console.log('currentStatus', currentStatus);
   return true;  
 });
     //3b: or clicked "take a break (early)"
@@ -84,7 +87,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   //listen for RECEIVING "true" from popup (re: click "take a break" = true)
   if (request.method == "isTakingBreak" && request.data === true) { 
     setCountdownTilWork();
+    currentStatus.totalBreaks++;
     sendResponse({ method: "", data: currentStatus }); 
+    console.log('currentStatus', currentStatus);
     return true;
   } 
 });

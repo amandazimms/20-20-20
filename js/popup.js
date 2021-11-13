@@ -2,7 +2,7 @@ let titleStatus = $('#titleStatus');
 let countdownTag = $('#countdownTag');
 let breakButton = $('#breakButton');
 
-let settingsIcom = $('#settingsIcon');
+let settingsIcon = $('#settingsIcon');
 let settingsArea = $('#settingsArea');
 
 let workSlider = $('#workDuration');
@@ -19,16 +19,22 @@ let breakMinutes = $('#breakMinutes')
 let breakTimeUnits = [breakSeconds, breakMinutes];
 let currentBreakTimeUnit = 'seconds';
 
-let homeIcom = $('#homeIcon');
+let homeIcon = $('#homeIcon');
 let homeArea = $('#homeArea');
 
+let statsIcon = $('#statsIcon');
+let statsArea = $('#statsArea');
+let totalBreaks = $('#totalBreaks');
 
 $( document ).ready( function(){
   updatePopupDOM();
   checkStatus();
   breakButton.on('click', takeBreak);
-  settingsIcom.on('click', openSettings);
-  homeIcom.on('click', openHome);
+
+  homeIcon.on('click', openHome);
+  statsIcon.on('click', openStats);
+  settingsIcon.on('click', openSettings);
+
   workSeconds.on('click', {clicked: 'seconds'}, toggleWorkTimeUnit); 
   workMinutes.on('click', {clicked: 'minutes'}, toggleWorkTimeUnit); 
   breakSeconds.on('click', {clicked: 'seconds'}, toggleBreakTimeUnit); 
@@ -94,14 +100,24 @@ breakSlider.on('change', function () {
   sendDataToBG("changeSettings", { breakDuration: +$(this).val() });
 });
 
-function openSettings(){
-  homeArea.hide();
-  settingsArea.show();
-}
-
 function openHome(){
   settingsArea.hide();
+  statsArea.hide();
   homeArea.show();
+}
+
+function openStats(){
+  settingsArea.hide();
+  homeArea.hide();
+  //update stats
+  
+  statsArea.show();
+}
+
+function openSettings(){
+  homeArea.hide();
+  statsArea.hide();
+  settingsArea.show();
 }
 
 function takeBreak(){ 
