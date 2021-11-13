@@ -24,7 +24,8 @@ let homeArea = $('#homeArea');
 
 let statsIcon = $('#statsIcon');
 let statsArea = $('#statsArea');
-let totalBreaks = $('#totalBreaks');
+let totalBreaksLabel = $('#totalBreaksLabel');
+let totalBreaks;
 
 $( document ).ready( function(){
   updatePopupDOM();
@@ -109,8 +110,7 @@ function openHome(){
 function openStats(){
   settingsArea.hide();
   homeArea.hide();
-  //update stats
-  
+  totalBreaksLabel.text(`Total Breaks Taken: ${totalBreaks}`)
   statsArea.show();
 }
 
@@ -143,6 +143,7 @@ function updatePopupDOM() {
   chrome.runtime.sendMessage({ method: "currentStatus", data: "" }, function (res) { 
     let isTakingBreak = res.data.isTakingBreak;
     let currentTimer = res.data.countdown;
+    totalBreaks = res.data.totalBreaks;
 
     let clockTime = new Date(0, 0, 0, 0, 0, currentTimer, 0);
     let minutes = `${clockTime.getMinutes() < 10 ? '0' : ''}${clockTime.getMinutes()}`;
