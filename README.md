@@ -38,17 +38,17 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [x] add customization: ability to define duration of break and work times
 - [x] expand customization: minutes or seconds toggle
 - [ ] debug issue with sendMessage timeout
+- [ ] fix issue where workDuration seconds is un-clickable until minutes has been clicked
 
 ### Phase 3 - styling and UX:
 - [x] add more instructions/feedback for user: e.g. when 'take a break' is clicked, should include a note about how to do 20-20-20, then *wait 20 sec*, then start the 20 min timer. 
 - [x] add title and logo to popup and style
 - [x] style popup button
-- [ ] better styling for minutes/seconds toggles in settings - buttons?
+- [x] better styling for minutes/seconds toggles in settings - buttons
 - [ ] style settings sliders to match the rest of the popup
-- [ ] update home icon to something more like a timer/clock
 - [ ] research other extensions - need to add a description / homepage? maybe a ? icon 'about' type page next to the settings and timer?
-- [ ] make button clickier feeling
-- [ ] update 128/48/32/16 images
+- [ ] make buttons clickier feeling
+- [x] update 128/48/32/16 images
 
 ### Phase 4 - polish and additional features:
 - [ ] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?

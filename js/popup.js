@@ -137,21 +137,23 @@ function updatePopupDOM() {
         
       if (currentTimer > 0) {
         titleStatus.text(`It's Work Time`);
+        countdownTag.show();
         countdownTag.text(`Time until next break: ${minutes}:${seconds}`);
         breakButton.text(`Take A Break Early`); //if it's not time to take a break yet, update this button wording
       }
       else  {
         titleStatus.text(`It's Break Time`);
-        countdownTag.text(`It's time for a break!`);
+        countdownTag.hide();
         breakButton.text(`Take A Break`); //change the button wording to remove 'early'
       } 
     }
   
     else {breakButton.hide(); //if we're already taking a break, hide this button 
       
-      if (currentTimer > 0)
+      if (currentTimer > 0) {
+        countdownTag.show();
         countdownTag.text(`Keep looking away for: ${currentTimer}`);
-      else  {
+      } else  {
         //countdownTag.text(`Great work! You can now get back to work :)`);
         breakButton.hide();
       }

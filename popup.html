@@ -19,7 +19,7 @@
     <div id="main">
     
       <div id="homeArea">
-        <h2 id="titleStatus">It's Work Time</h2>
+        <h2 id="titleStatus">Work Time</h2>
         <p id="countdownTag">Time until next break:</p>
         <button id="breakButton">Take A Break Now</button>
       </div>
@@ -29,11 +29,11 @@
 
         <h4 class="settingsTitle">Work Duration:</h4>
         <input type="range" id="workDuration" class="slider" min="1" max="120" step="1" value="20"/>
-        <p id="workDurationValue" class="settingsLabel">20</p><p class="settingsLabel timeUnitInactive" id="workSeconds">seconds</p><p class="settingsLabel timeUnitActive" id="workMinutes">minutes</p>
+        <p id="workDurationValue" class="settingsValue">20</p><button class="settingsLabel timeUnitInactive" id="workSeconds">seconds</button><button class="settingsLabel timeUnitActive" id="workMinutes">minutes</button>
 
         <h4 class="settingsTitle">Break Duration:</h4>
         <input type="range" id="breakDuration" class="slider" min="1" max="120" step="1" value="20"/>
-        <p id="breakDurationValue" class="settingsLabel">20</p><p class="settingsLabel timeUnitActive" id="breakSeconds">seconds</p><p class="settingsLabel timeUnitInactive" id="breakMinutes">minutes</p>
+        <p id="breakDurationValue" class="settingsValue">20</p><button class="settingsLabel timeUnitActive" id="breakSeconds">seconds</button><button class="settingsLabel timeUnitInactive" id="breakMinutes">minutes</button>
 
       </div>
     </div> 
