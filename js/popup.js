@@ -110,7 +110,6 @@ function openHome(){
 function openStats(){
   settingsArea.hide();
   homeArea.hide();
-  totalBreaksLabel.text(`Total Breaks Taken: ${totalBreaks}`)
   statsArea.show();
 }
 
@@ -144,6 +143,7 @@ function updatePopupDOM() {
     let isTakingBreak = res.data.isTakingBreak;
     let currentTimer = res.data.countdown;
     totalBreaks = res.data.totalBreaks;
+    totalBreaksLabel.text(`Total Breaks Taken: ${totalBreaks}`)
 
     let clockTime = new Date(0, 0, 0, 0, 0, currentTimer, 0);
     let minutes = `${clockTime.getMinutes() < 10 ? '0' : ''}${clockTime.getMinutes()}`;

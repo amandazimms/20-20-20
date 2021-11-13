@@ -30,16 +30,6 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 
 ## Work In Progress
 
-### Phase 2 - complete basic functionality:
-- [x] make notifications appear via a timer instead of button-on-dom
-- [x] when notification is closed, restart timer
-- [x] display timer count on popup
-- [x] display a message on the popup
-- [x] add customization: ability to define duration of break and work times
-- [x] expand customization: minutes or seconds toggle
-- [ ] debug issue with sendMessage timeout
-- [ ] fix issue where workDuration seconds is un-clickable until minutes has been clicked
-
 ### Phase 3 - styling and UX:
 - [x] add more instructions/feedback for user: e.g. when 'take a break' is clicked, should include a note about how to do 20-20-20, then *wait 20 sec*, then start the 20 min timer. 
 - [x] add title and logo to popup and style
@@ -51,9 +41,16 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [x] update 128/48/32/16 images
 
 ### Phase 4 - polish and additional features:
-- [ ] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?
+- [x] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?
 - [ ] add a pause button - see toucan toggle
 - [ ] add link to 20-20-20 rule info in popup
+- [ ] add abillity to choose whether home/stats/settings displays as the home screen (first one to show when popup is opened)
+
+### Known Issues
+- [ ] debug issue with sendMessage timeout
+- [ ] fix issue where workDuration seconds is un-clickable until minutes has been clicked
+- [ ] choosing a low number of seconds (1-4)? for workDuration causes problems - test further
 
 ### Stretch goals
 - [ ] expand functionality for other types of breaks - stretching, water, exercise, sit/stand desk, etc?
+- [ ] store totalBreaks: cookies?
