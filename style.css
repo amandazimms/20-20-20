@@ -1,5 +1,6 @@
 * {
   font-family: 'Fira Sans', sans-serif;
+  color:rgb(44, 44, 44)
 }
 
 body {
@@ -43,7 +44,7 @@ header {
 }
 
 .timeUnitInactive {
-  color: rgb(204, 209, 181);
+  color: rgb(179, 184, 160);
   background-color: #fff;
 }
 
@@ -104,18 +105,10 @@ button {
 }
 
 
-
-
-
-
-
-
-
-
 input[type=range] {
   height: 23px;
   -webkit-appearance: none;
-  margin: 10px 0;
+  margin: 3px 0 1px 0;
   width: 100%;
 }
 input[type=range]:focus {

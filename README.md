@@ -45,7 +45,7 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [x] add title and logo to popup and style
 - [x] style popup button
 - [x] better styling for minutes/seconds toggles in settings - buttons
-- [ ] style settings sliders to match the rest of the popup
+- [x] style settings sliders to match the rest of the popup
 - [ ] research other extensions - need to add a description / homepage? maybe a ? icon 'about' type page next to the settings and timer?
 - [ ] make buttons clickier feeling
 - [x] update 128/48/32/16 images
