@@ -19,7 +19,6 @@ setCountdownTilBreak();
 //PHASE 0: IF the user changes settings at any point in popup, import them here and make them official.
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.method == "changeSettings"){
-    console.log('req.data', request.data);
     currentSettings = { ...currentSettings, ...request.data };
 
     setCountdownTilBreak(); //restart timer so new changes begin now

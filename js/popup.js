@@ -128,6 +128,8 @@ function updatePopupDOM() {
     let isTakingBreak = res.data.isTakingBreak;
     let currentTimer = res.data.countdown;
 
+    let clockTime = new Date(0, 0, 0, 0, 0, currentTimer, 0);
+
     if(!isTakingBreak) {   
       breakButton.show(); //if we're not taking a break, show the 'take a break' button
         
