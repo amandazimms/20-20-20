@@ -129,12 +129,14 @@ function updatePopupDOM() {
     let currentTimer = res.data.countdown;
 
     let clockTime = new Date(0, 0, 0, 0, 0, currentTimer, 0);
+    let minutes = `${clockTime.getMinutes() < 10 ? '0' : ''}${clockTime.getMinutes()}`;
+    let seconds = `${clockTime.getSeconds() < 10 ? '0' : ''}${clockTime.getSeconds()}`;
 
     if(!isTakingBreak) {   
       breakButton.show(); //if we're not taking a break, show the 'take a break' button
         
       if (currentTimer > 0) {
-        countdownTag.text(`Time until next break: ${clockTime.getMinutes()}:${clockTime.getSeconds()}`);
+        countdownTag.text(`Time until next break: ${minutes}:${seconds}`);
         breakButton.text("Take A Break Early"); //if it's not time to take a break yet, update this button wording
       }
       else  {
