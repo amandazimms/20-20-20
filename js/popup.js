@@ -120,7 +120,8 @@ function openSettings(){
 }
 
 function takeBreak(){ 
-  //runs when user clicks "take a break (early)"
+  //runs when user clicks "take a break (or take a break early)"
+  chrome.notifications.clear('timeToBreak');
 
   //using this setup to SEND "true" to background (re: click "take a break" = true)
   chrome.runtime.sendMessage({ method: "isTakingBreak", data: true }, function (res) {

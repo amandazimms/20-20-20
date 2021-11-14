@@ -31,7 +31,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 function setCountdownTilBreak(){  
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(countdownID);
-  chrome.notifications.clear('timeToBreak');
 
   if (currentSettings.workTimeUnit == 'minutes')
     currentSettings.workDuration *= 60; //convert to seconds
@@ -77,22 +76,29 @@ function makeBreakNotification(){
 //PHASE 3: WAIT until user indicates they got the memo and are ready to take a break
     //3a: either by clicking to close notification
 chrome.notifications.onClosed.addListener(function(timeToBreak) {
-  setCountdownTilWork();
-  currentStatus.totalBreaks++;
-  console.log('currentStatus', currentStatus);
+  takeBreak();
   return true;  
 });
     //3b: or clicked "take a break (early)"
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   //listen for RECEIVING "true" from popup (re: click "take a break" = true)
   if (request.method == "isTakingBreak" && request.data === true) { 
-    setCountdownTilWork();
-    currentStatus.totalBreaks++;
     sendResponse({ method: "", data: currentStatus }); 
-    console.log('currentStatus', currentStatus);
+    takeBreak();
     return true;
   } 
 });
+
+function takeBreak(){
+  setCountdownTilWork();
+
+  currentStatus.totalBreaks++;
+  // chrome.storage.sync.get('total_breaks', function(data) {
+  //    currentStatus.totalBreaks = data.total_breaks;
+  // });
+  // currentStatus.totalBreaks++;
+  // chrome.storage.sync.set({'total_breaks': currentStatus.totalBreaks});
+}
 
 
 //PHASE 4: START countown until work time begins (i.e. until break is over)
