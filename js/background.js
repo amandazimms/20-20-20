@@ -4,10 +4,18 @@ let currentStatus = { //object that be sent to popup.js every second.
   totalBreaks: 0
 }; 
 
+function loadSavedSettings(){
+  chrome.storage.sync.set({'total_breaks': currentStatus.totalBreaks});
+  //todo - convert so that the stored data is the whole object (both of these)
+  // chrome.storage.sync.set({'currentStatus': currentStatus});
+  // chrome.storage.sync.set({'currentSettings': currentSettings});
+}
+loadSavedSettings(); //when opening chrome, get the settings from previous session
+
 let currentSettings = {
-  workDuration: 20, //in {workTimeUnit}s, how long between breaks? - 20 minutes = 1200 seconds
-  workTimeUnit: 'minutes',
-  breakDuration: 20, //in {breakTimeUnit}s, how long to take a break - 20 seconds
+  workDuration: 3, //in {workTimeUnit}s, how long between breaks? - 20 minutes = 1200 seconds
+  workTimeUnit: 'seconds',
+  breakDuration: 2, //in {breakTimeUnit}s, how long to take a break - 20 seconds
   breakTimeUnit: 'seconds'
 }
 
@@ -92,13 +100,27 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 function takeBreak(){
   setCountdownTilWork();
 
-  currentStatus.totalBreaks++;
-  // chrome.storage.sync.get('total_breaks', function(data) {
-  //    currentStatus.totalBreaks = data.total_breaks;
-  // });
-  // currentStatus.totalBreaks++;
-  // chrome.storage.sync.set({'total_breaks': currentStatus.totalBreaks});
+  chrome.storage.sync.get('total_breaks', function(data) {
+   currentStatus.totalBreaks = data.total_breaks;
+      console.log('before:', currentStatus.totalBreaks);
+      currentStatus.totalBreaks++;
+      console.log('after increasing:', currentStatus.totalBreaks);
+     chrome.storage.sync.set({'total_breaks': currentStatus.totalBreaks});
+  })
 }
+//todo: left off here- convert so that the stored info is the whole currentStatus object
+// chrome.storage.sync.get('currentStatus', function(data) {
+//   currentStatus = data.currentStatus;
+//   console.log('before:', currentStatus);
+
+//   currentStatus.totalBreaks++;
+
+//   chrome.storage.sync.set({'currentStatus': currentStatus});
+//   console.log('after increasing:', currentStatus);
+
+//   })
+
+// }
 
 
 //PHASE 4: START countown until work time begins (i.e. until break is over)
