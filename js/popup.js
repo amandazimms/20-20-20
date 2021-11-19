@@ -53,26 +53,42 @@ function updateSettingsDOM(){
   //using this setup to RECEIVE settings values from background for display on settings sliders
   chrome.runtime.sendMessage({ method: "currentSettings", data: "" }, function (res) { 
     console.log('popup received this res:', res);
+   
     workSlider.val(res.data.workDuration);
-    workSliderVal.val(res.data.workDuration);
+    workSliderVal.html(res.data.workDuration);
     //toggleWorkTimeUnit(res.data.workTimeUnit);
-    // let breakdur = res.data.breakDuration;
-    // let workdur = ;
+    
+    breakSlider.val(res.data.breakDuration);
+    breakSliderVal.html(res.data.breakDuration);
+   // toggleBreakTimeUnit(res.data.breakTimeUnit);
   })
 }
 
 function toggleWorkTimeUnit (timeUnit){ 
-  let clicked = timeUnit.data.clicked; //unit of time that was clicked (seconds or minutes)
+  let clicked;
+  if (timeUnit.data)
+    clicked = timeUnit.data.clicked ; //unit of time that was clicked (seconds or minutes)
+  else 
+    clicked = timeUnit;
+  
+    console.log('here. clicked is:', clicked, Math.random());
 
   if (currentWorkTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
+    console.log('a', Math.random());
     currentWorkTimeUnit = clicked;
     sendDataToBG("changeSettings", { workDuration: workSlider.val(), workTimeUnit: currentWorkTimeUnit });
     toggleSettingsCSS(this, workTimeUnits);
+  } else {
+    console.log('!', Math.random());
   }
 }
 
 function toggleBreakTimeUnit (timeUnit){ 
-  let clicked = timeUnit.data.clicked; //unit of time that was clicked (seconds or minutes)
+  let clicked;
+  if (timeUnit.data)
+    clicked = timeUnit.data.clicked ; //unit of time that was clicked (seconds or minutes)
+  else 
+    clicked = timeUnit;
 
   if (currentBreakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentBreakTimeUnit = clicked;
