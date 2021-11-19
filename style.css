@@ -87,6 +87,11 @@ header {
   margin-bottom: 5px;
 }
 
+.playPauseImage {
+  width: 45px;
+  margin: 0 10px 15px 0;
+}
+
 button {
 	background: none;
 	background-color: rgb(152, 190, 81);
