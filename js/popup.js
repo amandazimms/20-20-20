@@ -27,6 +27,9 @@ let statsArea = $('#statsArea');
 let totalBreaksLabel = $('#totalBreaksLabel');
 let totalBreaks;
 
+let infoIcon = $('#infoIcon');
+let infoArea = $('#infoArea');
+
 $( document ).ready( function(){
   updatePopupDOM();
   checkStatus();
@@ -35,6 +38,8 @@ $( document ).ready( function(){
   homeIcon.on('click', openHome);
   statsIcon.on('click', openStats);
   settingsIcon.on('click', openSettings);
+  infoIcon.on('click', openInfo);
+
 
   workSeconds.on('click', {clicked: 'seconds'}, toggleWorkTimeUnit); 
   workMinutes.on('click', {clicked: 'minutes'}, toggleWorkTimeUnit); 
@@ -104,19 +109,29 @@ breakSlider.on('change', function () {
 function openHome(){
   settingsArea.hide();
   statsArea.hide();
+  infoArea.hide();
   homeArea.show();
 }
 
 function openStats(){
   settingsArea.hide();
   homeArea.hide();
+  infoArea.hide();
   statsArea.show();
 }
 
 function openSettings(){
   homeArea.hide();
   statsArea.hide();
+  infoArea.hide();
   settingsArea.show();
+}
+
+function openInfo(){
+  homeArea.hide();
+  statsArea.hide();
+  settingsArea.hide();
+  infoArea.show();
 }
 
 function takeBreak(){ 

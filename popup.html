@@ -13,25 +13,48 @@
       <img class="logo" src="/images/Logo.png"/>
       <div class="navIcons">
         <img class="icon" id="homeIcon" src="/images/Home.png"/>
+        <img class="icon" id="infoIcon" src="/images/i.png"/>
         <img class="icon" id="settingsIcon" src="/images/Settings.png"/>
       </div>
     </header>
     <div id="main">
     
       <div id="homeArea">
-        <h2 id="titleStatus">Work Time</h2>
+        <h2 id="titleStatus">It's Work Time</h2>
         <p id="countdownTag">Time until next break:</p>
         <button id="breakButton">Take A Break Now</button>
       </div>
 
-      <div id="settingsArea">
-        <h2>Settings</h2>
+      <div id="infoArea">
+        <h3>What is Twenty?</h3>
+        <p>
+          Twenty is here to help you prevent computervision!
+        </p>
+        <p>The American Optometric Associaion recommends following the "<a href="https://www.aoa.org/healthy-eyes/eye-and-vision-conditions/computer-vision-syndrome?sso=y" target="_blank">
+          20-20-20 rule</a>" to help alleviate digital eyestrain. 
+        </p>
+        <h3>Twenty Reminds You</h3>
+        <p> 
+          With this extension, you'll get a notification when it's time to take your "twenty" break. You can either close the notification 
+          or press the "Take A Break" button on the home tab to indicate that you're starting your break. When twenty seconds
+          are up, the twenty minute timer resumes again.
+        </p>
+        <p>
+          You can even customize the lengths of your working and break periods in the settings tab. 
+        </p>
+        
 
-        <h4 class="settingsTitle">Work Duration:</h4>
+        
+      </div>
+
+      <div id="settingsArea">
+        <h3 class="settingsTitle">Work Duration:</h3>
         <input type="range" id="workDuration" class="slider" min="1" max="59" step="1" value="20"/>
         <p id="workDurationValue" class="settingsValue">20</p><button class="settingsLabel timeUnitInactive" id="workSeconds">seconds</button><button class="settingsLabel timeUnitActive" id="workMinutes">minutes</button>
+        
+        <div id="settingsSpacer"></div>
 
-        <h4 class="settingsTitle">Break Duration:</h4>
+        <h3 class="settingsTitle">Break Duration:</h3>
         <input type="range" id="breakDuration" class="slider" min="1" max="59" step="1" value="20"/>
         <p id="breakDurationValue" class="settingsValue">20</p><button class="settingsLabel timeUnitActive" id="breakSeconds">seconds</button><button class="settingsLabel timeUnitInactive" id="breakMinutes">minutes</button>
 
