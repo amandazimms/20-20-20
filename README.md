@@ -36,20 +36,20 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [x] style popup button
 - [x] better styling for minutes/seconds toggles in settings - buttons
 - [x] style settings sliders to match the rest of the popup
-- [ ] research other extensions - need to add a description / homepage? maybe a ? icon 'about' type page next to the settings and timer?
+- [x] research other extensions - need to add a description / homepage? maybe a ? icon 'about' type page next to the settings and timer?
 - [ ] make buttons clickier feeling
 - [x] update 128/48/32/16 images
 
 ### Phase 4 - polish and additional features:
 - [x] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?
 - [ ] add a pause button - see toucan toggle
-- [ ] add link to 20-20-20 rule info in popup
+- [x] add link to 20-20-20 rule info in popup
 - [ ] add abillity to choose whether home/stats/settings displays as the home screen (first one to show when popup is opened)
 
 ### Known Issues
 - [ ] debug issue with sendMessage timeout
-- [ ] fix issue where workDuration seconds is un-clickable until minutes has been clicked
-- [ ] choosing a low number of seconds (1-4)? for workDuration causes problems - test further
+- [x] fix issue where workDuration seconds is un-clickable until minutes has been clicked
+- [x] choosing a low number of seconds (1-4)? for workDuration causes problems - test further
 
 ### Stretch goals
 - [ ] expand functionality for other types of breaks - stretching, water, exercise, sit/stand desk, etc?
