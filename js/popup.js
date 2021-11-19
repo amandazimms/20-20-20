@@ -31,7 +31,9 @@ let infoIcon = $('#infoIcon');
 let infoArea = $('#infoArea');
 
 $( document ).ready( function(){
-  updatePopupDOM();
+  updateHomeDOM();
+  updateSettingsDOM();
+
   checkStatus();
   breakButton.on('click', takeBreak);
 
@@ -47,6 +49,17 @@ $( document ).ready( function(){
   breakMinutes.on('click', {clicked: 'minutes'}, toggleBreakTimeUnit); 
 });
 
+function updateSettingsDOM(){
+  //using this setup to RECEIVE settings values from background for display on settings sliders
+  chrome.runtime.sendMessage({ method: "currentSettings", data: "" }, function (res) { 
+    console.log('popup received this res:', res);
+    workSlider.val(res.data.workDuration);
+    workSliderVal.val(res.data.workDuration);
+    //toggleWorkTimeUnit(res.data.workTimeUnit);
+    // let breakdur = res.data.breakDuration;
+    // let workdur = ;
+  })
+}
 
 function toggleWorkTimeUnit (timeUnit){ 
   let clicked = timeUnit.data.clicked; //unit of time that was clicked (seconds or minutes)
@@ -92,7 +105,7 @@ workSlider.on('input', function () {
 
 workSlider.on('change', function () {
   //change fires only after mouse is released
-  sendDataToBG("changeSettings", { workDuration: $(this).val(), workTimeUnit: currentWorkTimeUnit });
+  sendDataToBG("changeSettings", { workDuration: +$(this).val(), workTimeUnit: currentWorkTimeUnit });
 });
 
 
@@ -154,16 +167,14 @@ function takeBreak(){
   });
 }
 
-
 function checkStatus(){ 
   //continually running (2 per second) function that fetches countdown from background.js
   setInterval(() => { 
-    updatePopupDOM();
+    updateHomeDOM();
   }, 500); //(ms) - runs twice per second
 }
 
-
-function updatePopupDOM() {
+function updateHomeDOM() {
   //using this setup to RECEIVE isTakingBreak from background
   chrome.runtime.sendMessage({ method: "currentStatus", data: "" }, function (res) { 
     let isTakingBreak = res.data.isTakingBreak;

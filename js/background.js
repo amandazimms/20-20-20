@@ -17,54 +17,40 @@ loadSavedSettings(); //when opening chrome, get the settings from previous sessi
 setCountdownTilBreak();
 
 
+//PHASE 0: startup tasks - load prevoius settings, 
 function loadSavedSettings(){
+  console.log('loading saved settings');
+  
   //todo how to prevent these from running upon first open? 
   chrome.storage.sync.get('currentSettings', function(data) {
-    console.log('settings data:', data);
     currentSettings = data;
-    console.log('cse: ', currentSettings);
-    //console.log('settings data was:', data);
-    //updateSettings(data);
+    //console.log('cse: ', currentSettings);
   });
   chrome.storage.sync.get('currentStatus', function(data) {
-    console.log('status data:', data);
     currentStatus = data;
-    console.log('cst: ', currentStatus);
-    //updateStatus(data);
+    //console.log('cst: ', currentStatus);
   });
+
+  //using this setup to SEND settings values to popup for display on settings sliders
+  chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if (request.method == "currentSettings") {
+        console.log('bg current settings;', currentSettings);
+        sendResponse({ method: "", data: currentSettings }) 
+        return true;
+    }
+  })
+
 }
-
-function updateSettings(newSettings){
-  currentSettings = { ...currentSettings, ...newSettings };
-  chrome.storage.sync.set({'currentSettings': currentSettings});
-  console.log('loaded settings:', currentSettings);
-}
-
-function updateStatus(newStatus){
-  currentStatus = { ...currentStatus, ...newStatus };
-  chrome.storage.sync.set({'currentStatus': currentStatus});
-  console.log('loaded status:', currentStatus);
-}
-
-
-//PHASE 0: IF the user changes settings at any point in popup, import them here and make them official.
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.method == "changeSettings"){
-    updateSettings(request.data)
-    setCountdownTilBreak(); //restart timer so new changes begin now
-    return true;
-  }
-});
 
 //PHASE 1: START the first timer, WAIT while user works, til ready to look away from the screen
 function setCountdownTilBreak(){  
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(countdownID);
 
-  if (currentSettings.workTimeUnit == 'minutes')
-    currentSettings.workDuration *= 60; //convert to seconds
+  currentSettings.workTimeUnit == 'minutes'
+      ? currentStatus.countdown = currentSettings.workDuration * 60
+      : currentStatus.countdown = currentSettings.workDuration;
 
-  currentStatus.countdown = currentSettings.workDuration;
   currentStatus.isTakingBreak = false;
 
   countdownID = setInterval(() => { 
@@ -73,10 +59,9 @@ function setCountdownTilBreak(){
 }
 
 function doBreakCountdown(){ //actual countdown
-    //SEND current status to popup.js for display on DOM
-
     //todo could store currentStatus here in chrome.sync
-    
+
+    //SEND current status to popup.js for display on DOM
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       if (request.method == "currentStatus") {
           sendResponse({ method: "", data: currentStatus }) 
@@ -93,7 +78,6 @@ function doBreakCountdown(){ //actual countdown
       return;
     }
 }
-
 
 //PHASE 2: MAKE a "take a break" notification for user
 function makeBreakNotification(){
@@ -121,7 +105,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     return true;
   } 
 });
-
 function takeBreak(){
   setCountdownTilWork();
 
@@ -135,10 +118,10 @@ function setCountdownTilWork(){
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(countdownID);
 
-  if (currentSettings.breakTimeUnit == 'minutes')
-    currentSettings.breakDuration *= 60; //convert to seconds
+  currentSettings.breakTimeUnit == 'minutes' 
+    ? currentStatus.countdown = currentSettings.breakDuration * 60 
+    : currentStatus.countdown = currentSettings.breakDuration;
 
-  currentStatus.countdown = currentSettings.breakDuration;
   currentStatus.isTakingBreak = true;
 
   countdownID = setInterval(() => { 
@@ -147,10 +130,9 @@ function setCountdownTilWork(){
 }
 
 function doWorkCountdown(){
-  //using this setup to SEND countdown to popup for display there
-
   //todo could send currentStatus to be stored in chrome.sync here
 
+  //using this setup to SEND countdown to popup for display there
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.method == "currentStatus") {
         sendResponse({ method: "", data: currentStatus }) 
@@ -167,6 +149,26 @@ function doWorkCountdown(){
   }
 }
 
+//ANYTIME: await settings/status changes and update accordingly
+function updateSettings(newSettings){
+  currentSettings = { ...currentSettings, ...newSettings };
+  chrome.storage.sync.set({'updated settings': currentSettings});
+    console.log('updated settings:', currentSettings);
+} 
+
+function updateStatus(newStatus){
+  currentStatus = { ...currentStatus, ...newStatus };
+  chrome.storage.sync.set({'currentStatus': currentStatus});
+    console.log('updated status:', currentStatus);
+}
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.method == "changeSettings"){
+    updateSettings(request.data)
+    setCountdownTilBreak(); //restart timer so new changes begin now
+    return true;
+  }
+});
 
 
 
