@@ -150,8 +150,8 @@ function updatePopupDOM() {
     let minutes = `${clockTime.getMinutes() < 10 ? '0' : ''}${clockTime.getMinutes()}`;
     let seconds = `${clockTime.getSeconds() < 10 ? '0' : ''}${clockTime.getSeconds()}`;
 
-    if(!isTakingBreak) {   
-      breakButton.show(); //if we're not taking a break, show the 'take a break' button
+    if(!isTakingBreak) {   //if it's WORK TIME
+      breakButton.show(); 
         
       if (currentTimer > 0) {
         titleStatus.text(`It's Work Time`);
@@ -166,13 +166,15 @@ function updatePopupDOM() {
       } 
     }
   
-    else {breakButton.hide(); //if we're already taking a break, hide this button 
+    else {                //if it's BREAK TIME
+      breakButton.hide(); //if we're already taking a break, hide this button 
       
-      if (currentTimer > 0) {
+      if (currentTimer > 0) { //actively during break countdown
+        titleStatus.text(`It's Break Time`);
         countdownTag.show();
-        countdownTag.text(`Keep looking away for: ${currentTimer}`);
-      } else  {
-        //countdownTag.text(`Great work! You can now get back to work :)`);
+        countdownTag.text(`Keep looking away for: ${minutes}:${seconds}`);
+      } else  { //break has ended - 
+        titleStatus.text(`It's Work Time`);
         breakButton.hide();
       }
     }
