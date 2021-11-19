@@ -107,36 +107,46 @@ breakSlider.on('change', function () {
 });
 
 function openHome(){
-  settingsArea.hide();
-  statsArea.hide();
-  infoArea.hide();
-  homeArea.show();
+  unselectAllIcons();
+  homeArea.show()
+  homeIcon.attr('src','./images/Home.png');
 }
 
 function openStats(){
-  settingsArea.hide();
-  homeArea.hide();
-  infoArea.hide();
-  statsArea.show();
+  // unselectAllIcons();
+  // statsArea.show();
+  //statsIcon.attr('src',
 }
 
 function openSettings(){
-  homeArea.hide();
-  statsArea.hide();
-  infoArea.hide();
+  unselectAllIcons();
   settingsArea.show();
+  settingsIcon.attr('src','./images/Settings.png');
 }
 
 function openInfo(){
+  unselectAllIcons();
+  infoArea.show();
+  infoIcon.attr('src','./images/i.png');
+}
+
+function unselectAllIcons(){
   homeArea.hide();
   statsArea.hide();
   settingsArea.hide();
-  infoArea.show();
+  infoArea.hide();
+
+  homeIcon.attr('src','./images/HomeUnselected.png');
+  //statsIcon.attr('src',
+  settingsIcon.attr('src','./images/SettingsUnselected.png');
+  infoIcon.attr('src','./images/iUnselected.png');
 }
 
 function takeBreak(){ 
   //runs when user clicks "take a break (or take a break early)"
   chrome.notifications.clear('timeToBreak');
+
+  breakButton.css('background-color','#819C50');
 
   //using this setup to SEND "true" to background (re: click "take a break" = true)
   chrome.runtime.sendMessage({ method: "isTakingBreak", data: true }, function (res) {
@@ -182,16 +192,14 @@ function updatePopupDOM() {
     }
   
     else {                //if it's BREAK TIME
-      breakButton.hide(); //if we're already taking a break, hide this button 
-      
+      breakButton.hide();
+      breakButton.css('background-color','#98BE50');
+
       if (currentTimer > 0) { //actively during break countdown
         titleStatus.text(`It's Break Time`);
         countdownTag.show();
         countdownTag.text(`Keep looking away for: ${minutes}:${seconds}`);
-      } else  { //break has ended - 
-        titleStatus.text(`It's Work Time`);
-        breakButton.hide();
-      }
+      } 
     }
     return true;
   })

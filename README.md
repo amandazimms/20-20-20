@@ -37,7 +37,7 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [x] better styling for minutes/seconds toggles in settings - buttons
 - [x] style settings sliders to match the rest of the popup
 - [x] research other extensions - need to add a description / homepage? maybe a ? icon 'about' type page next to the settings and timer?
-- [ ] make buttons clickier feeling
+- [x] make buttons clickier feeling
 - [x] update 128/48/32/16 images
 
 ### Phase 4 - polish and additional features:
