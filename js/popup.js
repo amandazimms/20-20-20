@@ -10,7 +10,7 @@ let workSliderVal = $('#workDurationValue');
 let workSeconds = $('#workSeconds');
 let workMinutes = $('#workMinutes')
 let workTimeUnits = [workSeconds, workMinutes];
-let currentWorkTimeUnit = 'seconds';
+let currentWorkTimeUnit = 'minutes';
 
 let breakSlider = $('#breakDuration');
 let breakSliderVal = $('#breakDurationValue');
@@ -60,7 +60,7 @@ function toggleBreakTimeUnit (timeUnit){
     currentBreakTimeUnit = clicked;
     sendDataToBG("changeSettings", { breakTimeUnit: currentBreakTimeUnit });
     toggleSettingsCSS(this, breakTimeUnits);
-  }
+  } 
 }
 
 function toggleSettingsCSS(clickedElement, elementList){
