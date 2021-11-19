@@ -48,7 +48,7 @@ function toggleWorkTimeUnit (timeUnit){
 
   if (currentWorkTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentWorkTimeUnit = clicked;
-    sendDataToBG("changeSettings", { workTimeUnit: currentWorkTimeUnit });
+    sendDataToBG("changeSettings", { workDuration: workSlider.val(), workTimeUnit: currentWorkTimeUnit });
     toggleSettingsCSS(this, workTimeUnits);
   }
 }
@@ -58,7 +58,7 @@ function toggleBreakTimeUnit (timeUnit){
 
   if (currentBreakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentBreakTimeUnit = clicked;
-    sendDataToBG("changeSettings", { breakTimeUnit: currentBreakTimeUnit });
+    sendDataToBG("changeSettings", { breakDuration: breakSlider.val(), breakTimeUnit: currentBreakTimeUnit });
     toggleSettingsCSS(this, breakTimeUnits);
   } 
 }
@@ -87,7 +87,7 @@ workSlider.on('input', function () {
 
 workSlider.on('change', function () {
   //change fires only after mouse is released
-  sendDataToBG("changeSettings", { workDuration: +$(this).val() });
+  sendDataToBG("changeSettings", { workDuration: $(this).val(), workTimeUnit: currentWorkTimeUnit });
 });
 
 
@@ -98,7 +98,7 @@ breakSlider.on('input', function () {
 
 breakSlider.on('change', function () {
   //change fires only after mouse is released
-  sendDataToBG("changeSettings", { breakDuration: +$(this).val() });
+  sendDataToBG("changeSettings", { breakDuration: +$(this).val(), breakTimeUnit: currentBreakTimeUnit });
 });
 
 function openHome(){
