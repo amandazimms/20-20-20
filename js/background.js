@@ -12,6 +12,15 @@ let currentSettings = {
 
 let countdownID; //used to start and stop countdowns
 
+
+function loadSavedSettings(){
+  //todo these should be GETs not SETs
+  // //chrome.storage.sync.set({'total_breaks': currentStatus.totalBreaks});
+  // chrome.storage.sync.set({'currentStatus': currentStatus});
+  // chrome.storage.sync.set({'currentSettings': currentSettings});
+}
+loadSavedSettings(); //when opening chrome, get the settings from previous session
+
 setCountdownTilBreak();
 
 //todo on refactor day: have one onMessage.addListener at the top of the script. Parcel out the logic inside each into their own function.
@@ -27,8 +36,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 function updateSettings(newSettings){
   currentSettings = { ...currentSettings, ...newSettings };
-  console.log('received:', newSettings);
-  console.log('changed settings to:', currentSettings);
+  chrome.storage.sync.set({'currentSettings': currentSettings});
 }
 
 //PHASE 1: START the first timer, WAIT while user works, til ready to look away from the screen
@@ -95,7 +103,28 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 function takeBreak(){
   setCountdownTilWork();
+
+  chrome.storage.sync.get('currentSettings', function(data) {
+    console.log('cs data:', data);
+
+  //  currentStatus.totalBreaks = data.total_breaks;
+  //     console.log('before:', currentStatus.totalBreaks);
+  //     currentStatus.totalBreaks++;
+  //     console.log('after increasing:', currentStatus.totalBreaks);
+  //    chrome.storage.sync.set({'total_breaks': currentStatus.totalBreaks});
+  })
 }
+//todo: left off here- convert so that the stored info is the whole currentStatus object
+// chrome.storage.sync.get('currentStatus', function(data) {
+//   currentStatus = data.currentStatus;
+//   console.log('before:', currentStatus);
+
+//   currentStatus.totalBreaks++;
+
+//   chrome.storage.sync.set({'currentStatus': currentStatus});
+//   console.log('after increasing:', currentStatus);
+//   })
+// }
 
 //PHASE 4: START countown until work time begins (i.e. until break is over)
 function setCountdownTilWork(){  
@@ -122,8 +151,9 @@ function doWorkCountdown(){
     }
   })
 
-  if (currentStatus.countdown > 0) 
+  if (currentStatus.countdown > 0) {
     currentStatus.countdown--;
+  }
   else { //when timer reaches 0, start the other countdown.
     setCountdownTilBreak(countdownID);
     return;
