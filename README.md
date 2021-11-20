@@ -47,7 +47,7 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [ ] add abillity to choose whether home/stats/settings displays as the home screen (first one to show when popup is opened)
 
 ### Known Issues
-- [ ] debug issue with sendMessage timeout
+- [x] debug issue with sendMessage timeout
 - [x] fix issue where workDuration seconds is un-clickable until minutes has been clicked
 - [x] choosing a low number of seconds (1-4)? for workDuration causes problems - test further
 

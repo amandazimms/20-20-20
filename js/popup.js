@@ -1,19 +1,4 @@
-//EXAMPLE 1: when popup INITIATES CONTACT with background, run this from a FUNCTION here in popup:
-// chrome.runtime.sendMessage({method: "home", data: "DATA FROM HOME TO BG"}, function (res){
-//   console.log('back in popup home, we received:', res.data);
-
-//   return true;
-// });
-
-// //EXAMPLE 2: when background INITIATES CONTACT with popup, this is step 2, and runs IF popup is open.
-// chrome.runtime.onMessage.addListener(
-//   function(request, sender, sendResponse) {
-//     if (request.msg === "testMessage") {
-//         console.log(request.data);
-//     }
-//   }
-// );
-
+//#region jquery variables setup
 let titleStatus = $('#titleStatus');
 let countdownTag = $('#countdownTag');
 let breakButton = $('#breakButton');
@@ -50,12 +35,14 @@ let playButton = $('#playButton');
 
 let currentStatus = {};
 let currentSettings = {};
+//#endregion
 
 $( document ).ready( function(){
   getDataThen(updateHomeDOM);
   getDataThen(updateSettingsDOM);
 
   checkStatus();
+
   breakButton.on('click', takeBreak);
 
   homeIcon.on('click', openHome);
@@ -69,12 +56,10 @@ $( document ).ready( function(){
   breakMinutes.on('click', {clicked: 'minutes'}, toggleBreakTimeUnit); 
 });
 
-
-
 function getDataThen(functionToRunAfterData){
   //GETTING SETTINGS/STATUS/COUNDTOWN DATA FROM BG. VARIOUS FUNCTIONS RUN THIS
 
-  //POPUP initiates an ask to BG. Results in BG sending both current data objects
+  //POPUP INITIATES an ask to BG. Results in BG sending both current data objects, so we can set them locally
   chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){    
     currentStatus = res.data.currentStatus;
     currentSettings = res.data.currentSettings;
@@ -137,6 +122,7 @@ function updateSettingsDOM(){
 
 //#region toggle time units
 function toggleWorkTimeUnit (timeUnit){ 
+  //when user clicks 'seconds' or 'minutes' on the work slider, this does the toggling
   let clicked = timeUnit.data.clicked ; //unit of time that was clicked (seconds or minutes)
 
   if (currentWorkTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
@@ -146,6 +132,7 @@ function toggleWorkTimeUnit (timeUnit){
 }
 
 function toggleBreakTimeUnit (timeUnit){ 
+  //when user clicks 'seconds' or 'minutes' on the break slider, this does the toggling
   let clicked = timeUnit.data.clicked ; //unit of time that was clicked (seconds or minutes)
 
   if (currentBreakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
@@ -155,7 +142,7 @@ function toggleBreakTimeUnit (timeUnit){
 }
 
 function toggleSettingsCSS(clickedElement, elementList){
-  //helper that keeps toggleXTimeUnit functions DRY - flip CSS classes for minutes/seconds on settings toggle
+  //flip CSS classes for minutes/seconds on settings toggle
   currentWorkTimeUnit = clickedElement;
 
   for(const element of elementList){ //make all elements inactive
@@ -168,6 +155,7 @@ function toggleSettingsCSS(clickedElement, elementList){
 //#endregion
 
 function sendDataToBG(_method, _data){
+  //when user makes any changes, send them back to BG script
   chrome.runtime.sendMessage({ method: _method, data: _data }, function (res) {
     return true;
   });
@@ -236,7 +224,7 @@ function takeBreak(){
 
   chrome.notifications.clear('timeToBreak');
 
-  //using this setup to SEND "true" to background (re: click "take a break" = true)
+  //POPUP INITIATES to send "true" to background (re: click "take a break" = true)
   chrome.runtime.sendMessage({ method: "isTakingBreak", data: true }, function (res) {
     return true;
   });
@@ -250,3 +238,9 @@ function checkStatus(){
 }
 
 
+
+// //EXAMPLE of how BACKGROUND INITIATES contact with popup, this is how to begin - but note that popup is not always open!
+// chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+//     if (request.msg === "testMessage") 
+//         console.log(request.data);
+//   });
