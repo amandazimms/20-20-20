@@ -11,14 +11,12 @@ let workSliderVal = $('#workDurationValue');
 let workSeconds = $('#workSeconds');
 let workMinutes = $('#workMinutes')
 let workTimeUnits = [workSeconds, workMinutes];
-let currentWorkTimeUnit = 'minutes';
 
 let breakSlider = $('#breakDuration');
 let breakSliderVal = $('#breakDurationValue');
 let breakSeconds = $('#breakSeconds');
 let breakMinutes = $('#breakMinutes')
 let breakTimeUnits = [breakSeconds, breakMinutes];
-let currentBreakTimeUnit = 'seconds';
 
 let homeIcon = $('#homeIcon');
 let homeArea = $('#homeArea');
@@ -125,8 +123,9 @@ function toggleWorkTimeUnit (timeUnit){
   //when user clicks 'seconds' or 'minutes' on the work slider, this does the toggling
   let clicked = timeUnit.data.clicked ; //unit of time that was clicked (seconds or minutes)
 
-  if (currentWorkTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
-    sendDataToBG("changeSettings", { workDuration: workSlider.val(), workTimeUnit: currentWorkTimeUnit });
+  if (currentSettings.workTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
+    currentSettings.workTimeUnit = clicked;
+    sendDataToBG("changeSettings", { workDuration: workSlider.val(), workTimeUnit: currentSettings.workTimeUnit });
     toggleSettingsCSS(this, workTimeUnits);
   } 
 }
@@ -135,15 +134,15 @@ function toggleBreakTimeUnit (timeUnit){
   //when user clicks 'seconds' or 'minutes' on the break slider, this does the toggling
   let clicked = timeUnit.data.clicked ; //unit of time that was clicked (seconds or minutes)
 
-  if (currentBreakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
-    sendDataToBG("changeSettings", { breakDuration: breakSlider.val(), breakTimeUnit: currentBreakTimeUnit });
+  if (currentSettings.breakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
+    currentSettings.breakTimeUnit = clicked;
+    sendDataToBG("changeSettings", { breakDuration: breakSlider.val(), breakTimeUnit: currentSettings.breakTimeUnit });
     toggleSettingsCSS(this, breakTimeUnits);
   } 
 }
 
 function toggleSettingsCSS(clickedElement, elementList){
   //flip CSS classes for minutes/seconds on settings toggle
-  currentWorkTimeUnit = clickedElement;
 
   for(const element of elementList){ //make all elements inactive
     element.addClass('timeUnitInactive');
@@ -168,7 +167,7 @@ workSlider.on('input', function () {//input fires constantly, i.e. while mouse i
 });
 
 workSlider.on('change', function () {//change fires only after mouse is released
-  sendDataToBG("changeSettings", { workDuration: +$(this).val(), workTimeUnit: currentWorkTimeUnit });
+  sendDataToBG("changeSettings", { workDuration: +$(this).val(), workTimeUnit: currentSettings.workTimeUnit });
 });
 
 breakSlider.on('input', function () { //input fires constantly, i.e. while mouse is still down the value will change
@@ -176,7 +175,7 @@ breakSlider.on('input', function () { //input fires constantly, i.e. while mouse
 });
 
 breakSlider.on('change', function () {//change fires only after mouse is released
-  sendDataToBG("changeSettings", { breakDuration: +$(this).val(), breakTimeUnit: currentBreakTimeUnit });
+  sendDataToBG("changeSettings", { breakDuration: +$(this).val(), breakTimeUnit: currentSettings.breakTimeUnit });
 });
 //#endregion
 

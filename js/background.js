@@ -1,6 +1,7 @@
 //When POPUP INITIATES contact with background, this will run as a step 2
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
   if (request.method == "changeSettings"){
+    console.log('--------------------->tiptop, settings req.data is:', request.data);
     updateSettings(request.data)
     setCountdownTilBreak(); //restart timer so new changes begin now
     sendResponse({ method: '', data: '' });
@@ -52,16 +53,6 @@ function loadSavedSettings(){
       console.log('load status updated: ', currentStatus);
     }
   });
-
-  //todo delete the commented as popup will fetch settings every .5 seconds anyway v
-  // //using this setup to BE ASKED TO SEND settings values to popup for display on settings sliders
-  // chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  //   if (request.method == "sendSettingsToPopup") {
-  //       console.log('bg current settings;', currentSettings);
-  //       sendResponse({ method: "", data: currentSettings }) 
-  //       return true;
-  //   }
-  // })
 }
 
 function setCountdownTilBreak(){  
@@ -132,16 +123,14 @@ function setCountdownTilWork(){
 function updateSettings(newSettings){
   //await settings/status changes and update accordingly
   currentSettings = { ...currentSettings, ...newSettings };
-  console.log('settings changed to:', currentSettings);
-  chrome.storage.sync.set({'currentSettings': currentSettings}); //todo storage
+  chrome.storage.sync.set({'currentSettings': currentSettings}); 
     console.log('updated settings:', currentSettings);
 } 
 
 function updateStatus(newStatus){
   //await settings/status changes and update accordingly
   currentStatus = { ...currentStatus, ...newStatus };
-  console.log('status changed to:', currentStatus);
-  chrome.storage.sync.set({'currentStatus': currentStatus}); //todo storage
+  chrome.storage.sync.set({'currentStatus': currentStatus}); 
     console.log('updated status:', currentStatus);
 }
 
