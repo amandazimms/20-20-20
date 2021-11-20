@@ -9,7 +9,15 @@
       console.log('change settings, req.data is:', request.data);
       //updateSettings(request.data)
       //setCountdownTilBreak(); //restart timer so new changes begin now
-      sendResponse({method: '', data: ''}); //todo omitting this line caused errors
+      sendResponse({method: '', data: ''});
+    }
+
+    else if (request.method == "popupImportDataFromBG"){
+      console.log('import data');
+      //updateSettings(request.data)
+      //setCountdownTilBreak(); //restart timer so new changes begin now
+      let allData = 4;
+      sendResponse({method: '', data: allData});
     }
   });
 // //EXAMPLE 2: when background INITIATES CONTACT with popup, this is how to begin - but note that popup is not always open!
@@ -187,35 +195,6 @@
 //   //   console.log('updated status:', currentStatus);
 // }
 
-// //Popup will request this each time it's opened, via importDataFromBackground();
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
-//   if (request.method == "popupImportDataFromBG"){
-//     console.log('!');
-//     let allData = 4;
-//     // let allData = {
-//     //   settings: currentSettings,
-//     //   status: currentStatus,
-//     // }
-//     sendResponse({method: '', data: allData }); 
-//   }
-// })
-// //EXAMPLE 1: when popup INITIATES CONTACT with background, this will run as a step 2
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
-//   if (request.method == "home"){
-//     //console.log('bg says: home. data is', request.data);
-//     //sendResponse({method: '', data: 'RETURN DATA FROM BG TO HOME!!!'}); //todo omitting this line caused errors
-//   }
-// })
-
-
-
-// // //EXAMPLE 1: when popup INITIATES CONTACT with background, this will run as a step 2
-// //   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
-// //   if (request.method == "home"){
-// //     //console.log('bg says: home. data is', request.data);
-// //     sendResponse({method: '', data: 'RETURN DATA FROM BG TO HOME!!!'}); //todo omitting this line caused errors
-// //   }
-// // })
 
 
 

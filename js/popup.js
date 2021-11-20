@@ -54,12 +54,12 @@ let currentStatus = {};
 let currentSettings = {};
 
 $( document ).ready( function(){
-  // getDataThen();
+   getDataThen();
   // updateHomeDOM();
   // updateSettingsDOM();
 
   // checkStatus();
-  //breakButton.on('click', takeBreak);
+  // breakButton.on('click', takeBreak);
 
   homeIcon.on('click', openHome);
   statsIcon.on('click', openStats);
@@ -74,25 +74,22 @@ $( document ).ready( function(){
 
 
 
-// function getDataThen(){
-//   //GETTING SETTINGS/STATUS/COUNDTOWN DATA FROM BG. VARIOUS FUNCTIONS RUN THIS
+function getDataThen(){
+  //GETTING SETTINGS/STATUS/COUNDTOWN DATA FROM BG. VARIOUS FUNCTIONS RUN THIS
 
-//   console.log('data');
-//   //POPUP initiates an ask to BG. Results in BG sending both current data objects
-//   chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){
-//     console.log('data 2');
-
-//     console.log('popup imported this data from background:', res.data);
+  //POPUP initiates an ask to BG. Results in BG sending both current data objects
+  chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){
+    console.log('popup imported this data from background:', res.data);
     
-//     // currentStatus = res.data.currentStatus;
-//     // currentSettings = res.data.currentSettings;
+    currentStatus = res.data.currentStatus;
+    currentSettings = res.data.currentSettings;
     
-//     // console.log('here');
-//     // functionToRunAfterData();
-//     return true;
-//   });
+    console.log('status:', currentStatus, 'settings', currentSettings);
+    //functionToRunAfterData();
+    return true;
+  });
 
-// }
+}
 
 
 
