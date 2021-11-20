@@ -1,11 +1,9 @@
 //EXAMPLE 1: when popup INITIATES CONTACT with background, run this from a FUNCTION here in popup:
-chrome.runtime.sendMessage({method: "home", data: "DATA FROM HOME TO BG"}, function (res){
-  console.log('back in popup home, we received:', res.data);
+// chrome.runtime.sendMessage({method: "home", data: "DATA FROM HOME TO BG"}, function (res){
+//   console.log('back in popup home, we received:', res.data);
 
-  return true;
-});
-
-
+//   return true;
+// });
 
 // //EXAMPLE 2: when background INITIATES CONTACT with popup, this is step 2, and runs IF popup is open.
 // chrome.runtime.onMessage.addListener(
@@ -237,7 +235,7 @@ function takeBreak(){
   currentStatus.isTakingBreak = true;
 
   chrome.notifications.clear('timeToBreak');
-  
+
   //using this setup to SEND "true" to background (re: click "take a break" = true)
   chrome.runtime.sendMessage({ method: "isTakingBreak", data: true }, function (res) {
     return true;
