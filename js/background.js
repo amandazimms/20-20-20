@@ -141,11 +141,12 @@ let currentSettings = {
 
 function takeBreak(){
   
-  setCountdownTilWork();
+  //setCountdownTilWork();
+  currentStatus.isTakingBreak = true;
 
   let inc = currentStatus.totalBreaks + 1;
-  let statusUpdate = {totalBreaks: inc};
-  updateStatus(statusUpdate);
+  let totalBreaksUpdate = {totalBreaks: inc};
+  updateStatus(totalBreaksUpdate);
 }
 
 //PHASE 4: START countown until work time begins (i.e. until break is over)
@@ -157,7 +158,6 @@ function setCountdownTilWork(){
     ? currentStatus.countdown = currentSettings.breakDuration * 60 
     : currentStatus.countdown = currentSettings.breakDuration;
 
-  currentStatus.isTakingBreak = true;
 
   currentStatus.countdownID = setInterval(() => { 
     doWorkCountdown();
