@@ -54,11 +54,11 @@ let currentStatus = {};
 let currentSettings = {};
 
 $( document ).ready( function(){
-   getDataThen(updateHomeDOM);
-  // updateSettingsDOM();
+  getDataThen(updateHomeDOM);
+  getDataThen(updateSettingsDOM);
 
-  // checkStatus();
-  // breakButton.on('click', takeBreak);
+  checkStatus();
+  breakButton.on('click', takeBreak);
 
   homeIcon.on('click', openHome);
   statsIcon.on('click', openStats);
@@ -87,9 +87,9 @@ function getDataThen(functionToRunAfterData){
 
 }
 
-
+//#region updateDOM with data
 function updateHomeDOM() {
-  //PLUGGING IN ALL VALUES TO DOM - home area. RUNS EACH TIME POPUP IS OPENED
+  //PLUGGING IN ALL VALUES TO DOM - home area. RUNS EACH TIME POPUP IS OPENED (called via getDataThen in onready and recurring checkStatus())
   totalBreaksLabel.text(`Total Breaks Taken: ${currentStatus.totalBreaks}`)
 
   let clockTime = new Date(0, 0, 0, 0, 0, currentStatus.countdown, 0);
@@ -124,22 +124,18 @@ function updateHomeDOM() {
   }
 }
 
-// function updateSettingsDOM(){
-//   //PLUGGING IN ALL VALUES TO DOM - settings area. RUNS EACH TIME POPUP IS OPENED
+function updateSettingsDOM(){
+  //PLUGGING IN ALL VALUES TO DOM - settings area. RUNS EACH TIME POPUP IS OPENED (called via getDataThen in onready)
 
-//   //using this setup to RECEIVE settings values from background for display on settings sliders
-//   chrome.runtime.sendMessage({ method: "sendSettingsToPopup", data: "" }, function (res) { 
-//     //console.log('popup received this data from sendSettingsToPopup:', res);
-   
-//     workSlider.val(res.data.workDuration);
-//     workSliderVal.html(res.data.workDuration);
-//     res.data.workTimeUnit === "minutes" ? toggleSettingsCSS(workMinutes, workTimeUnits) : toggleSettingsCSS(workSeconds, workTimeUnits);
-    
-//     breakSlider.val(res.data.breakDuration);
-//     breakSliderVal.html(res.data.breakDuration);
-//     res.data.breakTimeUnit === "minutes" ? toggleSettingsCSS(breakMinutes, breakTimeUnits) : toggleSettingsCSS(breakSeconds, breakTimeUnits);
-//   })
-// }
+  workSlider.val(currentSettings.workDuration);
+  workSliderVal.html(currentSettings.workDuration);
+  currentSettings.workTimeUnit === "minutes" ? toggleSettingsCSS(workMinutes, workTimeUnits) : toggleSettingsCSS(workSeconds, workTimeUnits);
+  
+  breakSlider.val(currentSettings.breakDuration);
+  breakSliderVal.html(currentSettings.breakDuration);
+  currentSettings.breakTimeUnit === "minutes" ? toggleSettingsCSS(breakMinutes, breakTimeUnits) : toggleSettingsCSS(breakSeconds, breakTimeUnits);
+}
+//#endregion
 
 //#region toggle time units
 function toggleWorkTimeUnit (timeUnit){ 
@@ -181,28 +177,24 @@ function sendDataToBG(_method, _data){
 
 //#region sliders value change
 //todo on refactor day - combine these xSlider.on'input' and xSlider.on'change functions = DRYer
-workSlider.on('input', function () {
-  //input fires constantly, i.e. while mouse is still down the value will change
+workSlider.on('input', function () {//input fires constantly, i.e. while mouse is still down the value will change
   workSliderVal.html(`${$(this).val()}`);
 });
 
-workSlider.on('change', function () {
-  //change fires only after mouse is released
+workSlider.on('change', function () {//change fires only after mouse is released
   sendDataToBG("changeSettings", { workDuration: +$(this).val(), workTimeUnit: currentWorkTimeUnit });
 });
 
-breakSlider.on('input', function () {
-  //input fires constantly, i.e. while mouse is still down the value will change
+breakSlider.on('input', function () { //input fires constantly, i.e. while mouse is still down the value will change
   breakSliderVal.html(`${$(this).val()}`);
 });
 
-breakSlider.on('change', function () {
-  //change fires only after mouse is released
+breakSlider.on('change', function () {//change fires only after mouse is released
   sendDataToBG("changeSettings", { breakDuration: +$(this).val(), breakTimeUnit: currentBreakTimeUnit });
 });
 //#endregion
 
-//#region open nav icons
+//#region open nav icon areas
 function openHome(){
   unselectAllIcons();
   homeArea.show()
@@ -212,7 +204,7 @@ function openHome(){
 function openStats(){
   // unselectAllIcons();
   // statsArea.show();
-  //statsIcon.attr('src',
+  // statsIcon.attr('src',
 }
 
 function openSettings(){
@@ -239,23 +231,24 @@ function unselectAllIcons(){
 }
 //#endregion
 
-// function takeBreak(){ 
-//   //runs when user clicks "take a break (or take a break early)"
-//   chrome.notifications.clear('timeToBreak');
+function takeBreak(){ 
+  //runs when user clicks "take a break (or take a break early)"
+  breakButton.css('background-color','#819C50');
+  currentStatus.isTakingBreak = true;
 
-//   breakButton.css('background-color','#819C50');
+  chrome.notifications.clear('timeToBreak');
+  
+  //using this setup to SEND "true" to background (re: click "take a break" = true)
+  chrome.runtime.sendMessage({ method: "isTakingBreak", data: true }, function (res) {
+    return true;
+  });
+}
 
-//   //using this setup to SEND "true" to background (re: click "take a break" = true)
-//   chrome.runtime.sendMessage({ method: "isTakingBreak", data: true }, function (res) {
-//     return true;
-//   });
-// }
-
-// function checkStatus(){ 
-//   //continually running (2 per second) function that fetches countdown from background.js
-//   setInterval(() => { 
-//     updateHomeDOM();
-//   }, 500); //(ms) - runs twice per second
-// }
+function checkStatus(){ 
+  //continually running (2 per second) function that fetches countdown from background.js
+  setInterval(() => { 
+    getDataThen(updateHomeDOM);
+  }, 500); //(ms) - runs twice per second
+}
 
 

@@ -1,28 +1,43 @@
 //EXAMPLE 1: when popup INITIATES CONTACT with background, this will run as a step 2
-  chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
-    if (request.method == "home"){
-      console.log('bg says: home. data is', request.data);
-      sendResponse({method: '', data: 'RETURN DATA FROM BG TO HOME!!!'}); //todo omitting this line caused errors
-    }
-  
-    else if (request.method == "changeSettings"){
-      console.log('change settings, req.data is:', request.data);
-      //updateSettings(request.data)
-      //setCountdownTilBreak(); //restart timer so new changes begin now
-      sendResponse({method: '', data: ''});
-    }
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
+  if (request.method == "home"){
+    console.log('bg says: home. data is', request.data);
+    sendResponse({method: '', data: 'RETURN DATA FROM BG TO HOME!!!'}); //todo omitting this line caused errors
+  }
 
-    else if (request.method == "popupImportDataFromBG"){
-      console.log('import data');
-      let allData = {
-        currentSettings: currentSettings,
-        currentStatus: currentStatus
-      }
-      sendResponse({method: '', data: allData});
+  else if (request.method == "changeSettings"){
+    //console.log('change settings, req.data is:', request.data);
+    //updateSettings(request.data)
+    //setCountdownTilBreak(); //restart timer so new changes begin now
+    sendResponse({method: '', data: ''});
+  }
+
+  else if (request.method == "popupImportDataFromBG"){
+    console.log('import data');
+    let allData = {
+      currentSettings: currentSettings,
+      currentStatus: currentStatus
     }
+    sendResponse({method: '', data: allData});
+  }
+
+  else if (request.method == "isTakingBreak" && request.data === true) { 
+    sendResponse({ method: "", data: currentStatus }); 
+    takeBreak();
+    return true;
+  } 
+
+});
+
+//listen (at all times) for user clicking to close notification
+chrome.notifications.onClosed.addListener(function(timeToBreak) {
+  takeBreak();
+  return true;  
+});
 
 
-  });
+
+
 // //EXAMPLE 2: when background INITIATES CONTACT with popup, this is how to begin - but note that popup is not always open!
 // chrome.runtime.sendMessage({ msg: "testMessage", data: 4});
 
@@ -123,45 +138,31 @@ let currentSettings = {
 //   });
 // }
  
-// //PHASE 3: WAIT until user indicates they got the memo and are ready to take a break
-//     //3a: either by clicking to close notification
-// chrome.notifications.onClosed.addListener(function(timeToBreak) {
-//   takeBreak();
-//   return true;  
-// });
-//     //3b: or clicked "take a break (early)"
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//   //(at any time), listen for RECEIVING "true" from popup (re: click "take a break" = true)
-//   if (request.method == "isTakingBreak" && request.data === true) { 
-//     sendResponse({ method: "", data: currentStatus }); 
-//     takeBreak();
-//     return true;
-//   } 
-// });
-// function takeBreak(){
+
+function takeBreak(){
   
-//   setCountdownTilWork();
+  setCountdownTilWork();
 
-//   let inc = currentStatus.totalBreaks + 1;
-//   let statusUpdate = {totalBreaks: inc};
-//   updateStatus(statusUpdate);
-// }
+  let inc = currentStatus.totalBreaks + 1;
+  let statusUpdate = {totalBreaks: inc};
+  updateStatus(statusUpdate);
+}
 
-// //PHASE 4: START countown until work time begins (i.e. until break is over)
-// function setCountdownTilWork(){  
-//   //start by initializing timer, clearing notifications and previously running timers
-//   clearInterval(currentStatus.countdownID);
+//PHASE 4: START countown until work time begins (i.e. until break is over)
+function setCountdownTilWork(){  
+  //start by initializing timer, clearing notifications and previously running timers
+  clearInterval(currentStatus.countdownID);
 
-//   currentSettings.breakTimeUnit == 'minutes' 
-//     ? currentStatus.countdown = currentSettings.breakDuration * 60 
-//     : currentStatus.countdown = currentSettings.breakDuration;
+  currentSettings.breakTimeUnit == 'minutes' 
+    ? currentStatus.countdown = currentSettings.breakDuration * 60 
+    : currentStatus.countdown = currentSettings.breakDuration;
 
-//   currentStatus.isTakingBreak = true;
+  currentStatus.isTakingBreak = true;
 
-//   currentStatus.countdownID = setInterval(() => { 
-//     doWorkCountdown();
-//   }, 1000); //(ms) - runs every 1 second
-// }
+  currentStatus.countdownID = setInterval(() => { 
+    doWorkCountdown();
+  }, 1000); //(ms) - runs every 1 second
+}
 
 // function doWorkCountdown(){
 //   //todo could send currentStatus to be stored in chrome.sync here
@@ -191,12 +192,12 @@ let currentSettings = {
 //   //   console.log('updated settings:', currentSettings);
 // } 
 
-// function updateStatus(newStatus){
-//   currentStatus = { ...currentStatus, ...newStatus };
-//   console.log('bg reports that status is now:', currentStatus);
-//   // chrome.storage.sync.set({'currentStatus': currentStatus}); //todo storage
-//   //   console.log('updated status:', currentStatus);
-// }
+function updateStatus(newStatus){
+  currentStatus = { ...currentStatus, ...newStatus };
+  console.log('bg reports that status is now:', currentStatus);
+  // chrome.storage.sync.set({'currentStatus': currentStatus}); //todo storage
+  //   console.log('updated status:', currentStatus);
+}
 
 
 
