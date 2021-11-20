@@ -35,34 +35,34 @@ let currentSettings = { //sent to popup.js every second.
   breakTimeUnit: 'seconds'
 }
 
-// loadSavedSettings(); //when opening chrome, get the settings from previous session
 setCountdownTilBreak();
+loadSavedSettings(); 
 
-// //PHASE 0: startup tasks - load prevoius settings
-//function loadSavedSettings(){  
-  // chrome.storage.sync.get('currentSettings', function(data) { //todo storage 
-  //   if(data){
-  //     currentSettings = data;
-  //     console.log('load settings updated: ', currentSettings);
+function loadSavedSettings(){  
+  //when opening chrome, get the settings from previous session
+  chrome.storage.sync.get('currentSettings', function(data) {
+    if(data){
+      currentSettings = data;
+      console.log('load settings updated: ', currentSettings);
+    }
+  });
+  chrome.storage.sync.get('currentStatus', function(data) {
+    if(data){
+      currentStatus = data;
+      console.log('load status updated: ', currentStatus);
+    }
+  });
+
+  //todo delete the commented as popup will fetch settings every .5 seconds anyway v
+  // //using this setup to BE ASKED TO SEND settings values to popup for display on settings sliders
+  // chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  //   if (request.method == "sendSettingsToPopup") {
+  //       console.log('bg current settings;', currentSettings);
+  //       sendResponse({ method: "", data: currentSettings }) 
+  //       return true;
   //   }
-  // });
-  // chrome.storage.sync.get('currentStatus', function(data) {
-  //   if(data){
-  //     currentStatus = data;
-  //     console.log('load status updated: ', currentStatus);
-  //   }
-  // });
-
-//   //using this setup to BE ASKED TO SEND settings values to popup for display on settings sliders
-//   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//     if (request.method == "sendSettingsToPopup") {
-//         console.log('bg current settings;', currentSettings);
-//         sendResponse({ method: "", data: currentSettings }) 
-//         return true;
-//     }
-//   })
-
-// }
+  // })
+}
 
 function setCountdownTilBreak(){  
   // START the first timer, WAIT while user works, til ready to look away from the screen
@@ -133,16 +133,16 @@ function updateSettings(newSettings){
   //await settings/status changes and update accordingly
   currentSettings = { ...currentSettings, ...newSettings };
   console.log('settings changed to:', currentSettings);
-  // chrome.storage.sync.set({'updated settings': currentSettings}); //todo storage
-  //   console.log('updated settings:', currentSettings);
+  chrome.storage.sync.set({'currentSettings': currentSettings}); //todo storage
+    console.log('updated settings:', currentSettings);
 } 
 
 function updateStatus(newStatus){
   //await settings/status changes and update accordingly
   currentStatus = { ...currentStatus, ...newStatus };
   console.log('status changed to:', currentStatus);
-  // chrome.storage.sync.set({'currentStatus': currentStatus}); //todo storage
-  //   console.log('updated status:', currentStatus);
+  chrome.storage.sync.set({'currentStatus': currentStatus}); //todo storage
+    console.log('updated status:', currentStatus);
 }
 
 
