@@ -14,11 +14,14 @@
 
     else if (request.method == "popupImportDataFromBG"){
       console.log('import data');
-      //updateSettings(request.data)
-      //setCountdownTilBreak(); //restart timer so new changes begin now
-      let allData = 4;
+      let allData = {
+        currentSettings: currentSettings,
+        currentStatus: currentStatus
+      }
       sendResponse({method: '', data: allData});
     }
+
+
   });
 // //EXAMPLE 2: when background INITIATES CONTACT with popup, this is how to begin - but note that popup is not always open!
 // chrome.runtime.sendMessage({ msg: "testMessage", data: 4});
@@ -26,20 +29,20 @@
 
 
 
-// let currentStatus = { //object that be sent to popup.js every second.
-//   isTakingBreak: false, //BREAK, throughout, refers to looking away, e.g. practicing the '20-20-20' rule
-//   countdown: 0,  //countown - when finished, time to either start or stop taking a break
-//   totalBreaks: 0,
-//   countdownID: countdownID  //used to start and stop countdowns
+let currentStatus = { //object that be sent to popup.js every second.
+  isTakingBreak: false, //BREAK, throughout, refers to looking away, e.g. practicing the '20-20-20' rule
+  countdown: 0,  //countown - when finished, time to either start or stop taking a break
+  totalBreaks: 0,
+  countdownID: 0  //used to start and stop countdowns
 
-// }; 
+}; 
 
-// let currentSettings = {
-//   workDuration: 20, //in {workTimeUnit}s, how long between breaks? - 20 minutes = 1200 seconds
-//   workTimeUnit: 'minutes',
-//   breakDuration: 20, //in {breakTimeUnit}s, how long to take a break - 20 seconds
-//   breakTimeUnit: 'seconds'
-// }
+let currentSettings = {
+  workDuration: 20, //in {workTimeUnit}s, how long between breaks? - 20 minutes = 1200 seconds
+  workTimeUnit: 'minutes',
+  breakDuration: 20, //in {breakTimeUnit}s, how long to take a break - 20 seconds
+  breakTimeUnit: 'seconds'
+}
 
 // loadSavedSettings(); //when opening chrome, get the settings from previous session
 // setCountdownTilBreak();

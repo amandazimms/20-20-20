@@ -54,7 +54,7 @@ let currentStatus = {};
 let currentSettings = {};
 
 $( document ).ready( function(){
-   getDataThen();
+   getDataThen(tester);
   // updateHomeDOM();
   // updateSettingsDOM();
 
@@ -74,7 +74,7 @@ $( document ).ready( function(){
 
 
 
-function getDataThen(){
+function getDataThen(functionToRunAfterData){
   //GETTING SETTINGS/STATUS/COUNDTOWN DATA FROM BG. VARIOUS FUNCTIONS RUN THIS
 
   //POPUP initiates an ask to BG. Results in BG sending both current data objects
@@ -83,12 +83,17 @@ function getDataThen(){
     
     currentStatus = res.data.currentStatus;
     currentSettings = res.data.currentSettings;
+    //console.log(res.data);
     
     console.log('status:', currentStatus, 'settings', currentSettings);
-    //functionToRunAfterData();
+    functionToRunAfterData();
     return true;
   });
 
+}
+
+function tester(){
+  console.log('it me tester');
 }
 
 
