@@ -67,6 +67,7 @@ function setCountdownTilBreak(){
   currentStatus.isTakingBreak = false;
 
   currentStatus.countdownID = setInterval(() => { 
+    console.log('work count:', currentStatus.countdown);
     if (currentStatus.countdown > 0){
       currentStatus.countdown--;
     }
@@ -109,11 +110,13 @@ function setCountdownTilWork(){
     : currentStatus.countdown = currentSettings.breakDuration;
 
   currentStatus.countdownID = setInterval(() => { 
+    console.log('break count:', currentStatus.countdown);
     if (currentStatus.countdown > 0) {
       currentStatus.countdown--;
     }
     else { //when timer reaches 0, start the other countdown.
-      setCountdownTilBreak(currentStatus.countdownID);
+      clearInterval(currentStatus.countdownID);
+      setCountdownTilBreak();
       return;
     }
   }, 1000); //(ms) - runs every 1 second

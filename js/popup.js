@@ -59,8 +59,8 @@ function getDataThen(functionToRunAfterData){
 
   //POPUP INITIATES an ask to BG. Results in BG sending both current data objects, so we can set them locally
   chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){    
-    currentStatus = res.data.currentStatus;
-    currentSettings = res.data.currentSettings;
+    currentStatus = {...currentStatus, ...res.data.currentStatus};
+    currentSettings = {...currentSettings, ...res.data.currentSettings};
     
     functionToRunAfterData();
     return true;
@@ -125,6 +125,7 @@ function toggleWorkTimeUnit (timeUnit){
 
   if (currentSettings.workTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentSettings.workTimeUnit = clicked;
+    //todo our local currentSettings will get updated after .5s anyway, but should set it here too or?
     sendDataToBG("changeSettings", { workDuration: workSlider.val(), workTimeUnit: currentSettings.workTimeUnit });
     toggleSettingsCSS(this, workTimeUnits);
   } 
@@ -136,6 +137,7 @@ function toggleBreakTimeUnit (timeUnit){
 
   if (currentSettings.breakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
     currentSettings.breakTimeUnit = clicked;
+    //todo our local currentSettings will get updated after .5s anyway, but should set it here too or?
     sendDataToBG("changeSettings", { breakDuration: breakSlider.val(), breakTimeUnit: currentSettings.breakTimeUnit });
     toggleSettingsCSS(this, breakTimeUnits);
   } 
