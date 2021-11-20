@@ -54,8 +54,7 @@ let currentStatus = {};
 let currentSettings = {};
 
 $( document ).ready( function(){
-   getDataThen(tester);
-  // updateHomeDOM();
+   getDataThen(updateHomeDOM);
   // updateSettingsDOM();
 
   // checkStatus();
@@ -78,64 +77,51 @@ function getDataThen(functionToRunAfterData){
   //GETTING SETTINGS/STATUS/COUNDTOWN DATA FROM BG. VARIOUS FUNCTIONS RUN THIS
 
   //POPUP initiates an ask to BG. Results in BG sending both current data objects
-  chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){
-    console.log('popup imported this data from background:', res.data);
-    
+  chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){    
     currentStatus = res.data.currentStatus;
     currentSettings = res.data.currentSettings;
-    //console.log(res.data);
     
-    console.log('status:', currentStatus, 'settings', currentSettings);
     functionToRunAfterData();
     return true;
   });
 
 }
 
-function tester(){
-  console.log('it me tester');
-}
-
-
 
 function updateHomeDOM() {
-  // console.log('now at home dom. ');
-  // //PLUGGING IN ALL VALUES TO DOM - home area. RUNS EACH TIME POPUP IS OPENED
-  // console.log('currentSettings:', currentSettings);
-  // console.log('currentStatus:', currentStatus);
+  //PLUGGING IN ALL VALUES TO DOM - home area. RUNS EACH TIME POPUP IS OPENED
+  totalBreaksLabel.text(`Total Breaks Taken: ${currentStatus.totalBreaks}`)
 
-  // totalBreaksLabel.text(`Total Breaks Taken: ${currentStatus.totalBreaks}`)
+  let clockTime = new Date(0, 0, 0, 0, 0, currentStatus.countdown, 0);
+  let minutes = `${clockTime.getMinutes() < 10 ? '0' : ''}${clockTime.getMinutes()}`;
+  let seconds = `${clockTime.getSeconds() < 10 ? '0' : ''}${clockTime.getSeconds()}`;
 
-  // let clockTime = new Date(0, 0, 0, 0, 0, currentStatus.countdown, 0);
-  // let minutes = `${clockTime.getMinutes() < 10 ? '0' : ''}${clockTime.getMinutes()}`;
-  // let seconds = `${clockTime.getSeconds() < 10 ? '0' : ''}${clockTime.getSeconds()}`;
-
-  // if(!currentStaus.isTakingBreak) {  //if it's WORK TIME
-  //   breakButton.show(); 
+  if(!currentStatus.isTakingBreak) {  //if it's WORK TIME
+    breakButton.show(); 
       
-  //   if (currentStatus.countdown > 0) {
-  //     titleStatus.text(`It's Work Time`);
-  //     countdownTag.show();
-  //     countdownTag.text(`Time until next break: ${minutes}:${seconds}`);
-  //     breakButton.text(`Take A Break Early`); //if it's not time to take a break yet, update this button wording
-  //   }
-  //   else  {
-  //     titleStatus.text(`It's Break Time`);
-  //     countdownTag.hide();
-  //     breakButton.text(`Take A Break`); //change the button wording to remove 'early'
-  //   } 
-  // }
+    if (currentStatus.countdown > 0) {
+      titleStatus.text(`It's Work Time`);
+      countdownTag.show();
+      countdownTag.text(`Time until next break: ${minutes}:${seconds}`);
+      breakButton.text(`Take A Break Early`); //if it's not time to take a break yet, update this button wording
+    }
+    else  {
+      titleStatus.text(`It's Break Time`);
+      countdownTag.hide();
+      breakButton.text(`Take A Break`); //change the button wording to remove 'early'
+    } 
+  }
 
-  // else {                            //if it's BREAK TIME
-  //   breakButton.hide();
-  //   breakButton.css('background-color','#98BE50');
+  else {                            //if it's BREAK TIME
+    breakButton.hide();
+    breakButton.css('background-color','#98BE50');
 
-  //   if (currentStatus.countdown > 0) { //actively during break countdown
-  //     titleStatus.text(`It's Break Time`);
-  //     countdownTag.show();
-  //     countdownTag.text(`Keep looking away for: ${minutes}:${seconds}`);
-  //   } 
-  // }
+    if (currentStatus.countdown > 0) { //actively during break countdown
+      titleStatus.text(`It's Break Time`);
+      countdownTag.show();
+      countdownTag.text(`Keep looking away for: ${minutes}:${seconds}`);
+    } 
+  }
 }
 
 // function updateSettingsDOM(){
