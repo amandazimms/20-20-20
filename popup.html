@@ -48,8 +48,12 @@
       </div>
 
       <div id="settingsArea">
-        <img class="playPauseImage" id="playButton" src="/images/Play.png">
-        <img class="playPauseImage" src="/images/PauseUnselected.png">  
+        <div id="playPauseArea">
+          <h3 class="settingsTitle">Status:</h3>
+          <img class="playPauseImage" id="playButton" src="/images/Play.png">
+          <img class="playPauseImage" src="/images/PauseUnselected.png"> 
+          <p class="pauseDescriptionText">Twenty is now paused.</p>
+        </div>
 
         <h3 class="settingsTitle">Work Duration:</h3>
         <input type="range" id="workDuration" class="slider" min="1" max="59" step="1" value="20"/>
