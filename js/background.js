@@ -36,19 +36,20 @@ let currentSettings = { //sent to popup.js every second.
   breakTimeUnit: 'seconds'
 }
 
+//START here - triggers the whole program to run:
+//loadSavedSettings(); 
 setCountdownTilBreak();
-loadSavedSettings(); 
 
 function loadSavedSettings(){  
   //when opening chrome, get the settings from previous session
   chrome.storage.sync.get('currentSettings', function(data) {
-    if(data){
+    if(data){ //todo check if this is falsy if it's not what we want
       currentSettings = data;
       console.log('load settings updated: ', currentSettings);
     }
   });
   chrome.storage.sync.get('currentStatus', function(data) {
-    if(data){
+    if(data){ //todo check if this is falsy if it's not what we want
       currentStatus = data;
       console.log('load status updated: ', currentStatus);
     }
@@ -56,20 +57,20 @@ function loadSavedSettings(){
 }
 
 function setCountdownTilBreak(){  
-  // START the first timer, WAIT while user works, til ready to look away from the screen
+  // START the first timer, WAIT while user works, til ready for break
   
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(currentStatus.countdownID);
   currentSettings.workTimeUnit == 'minutes'
-      ? currentStatus.countdown = currentSettings.workDuration * 60
-      : currentStatus.countdown = currentSettings.workDuration;
+      ? currentSettings.countdown = currentSettings.workDuration * 60
+      : currentSettings.countdown = currentSettings.workDuration;
 
   currentStatus.isTakingBreak = false;
 
   currentStatus.countdownID = setInterval(() => { 
-    console.log('work count:', currentStatus.countdown);
-    if (currentStatus.countdown > 0){
-      currentStatus.countdown--;
+    console.log('work count:', currentSettings.countdown);
+    if (currentSettings.countdown > 0){
+      currentSettings.countdown--;
     }
     else { //when countdown reaches 0, stop this setInterval and make a notification
       makeBreakNotification();
@@ -106,13 +107,13 @@ function setCountdownTilWork(){
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(currentStatus.countdownID);
   currentSettings.breakTimeUnit == 'minutes' 
-    ? currentStatus.countdown = currentSettings.breakDuration * 60 
-    : currentStatus.countdown = currentSettings.breakDuration;
+    ? currentSettings.countdown = currentSettings.breakDuration * 60 
+    : currentSettings.countdown = currentSettings.breakDuration;
 
   currentStatus.countdownID = setInterval(() => { 
-    console.log('break count:', currentStatus.countdown);
-    if (currentStatus.countdown > 0) {
-      currentStatus.countdown--;
+    console.log('break count:', currentSettings.countdown);
+    if (currentSettings.countdown > 0) {
+      currentSettings.countdown--;
     }
     else { //when timer reaches 0, start the other countdown.
       clearInterval(currentStatus.countdownID);
