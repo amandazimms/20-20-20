@@ -62,15 +62,15 @@ function setCountdownTilBreak(){
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(currentStatus.countdownID);
   currentSettings.workTimeUnit == 'minutes'
-      ? currentSettings.countdown = currentSettings.workDuration * 60
-      : currentSettings.countdown = currentSettings.workDuration;
+      ? currentStatus.countdown = currentSettings.workDuration * 60
+      : currentStatus.countdown = currentSettings.workDuration;
 
   currentStatus.isTakingBreak = false;
 
   currentStatus.countdownID = setInterval(() => { 
-    console.log('work count:', currentSettings.countdown);
-    if (currentSettings.countdown > 0){
-      currentSettings.countdown--;
+          //console.log('work count:', currentSettings.countdown);
+    if (currentStatus.countdown > 0){
+      currentStatus.countdown--;
     }
     else { //when countdown reaches 0, stop this setInterval and make a notification
       makeBreakNotification();
@@ -107,13 +107,13 @@ function setCountdownTilWork(){
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(currentStatus.countdownID);
   currentSettings.breakTimeUnit == 'minutes' 
-    ? currentSettings.countdown = currentSettings.breakDuration * 60 
-    : currentSettings.countdown = currentSettings.breakDuration;
+    ? currentStatus.countdown = currentSettings.breakDuration * 60 
+    : currentStatus.countdown = currentSettings.breakDuration;
 
   currentStatus.countdownID = setInterval(() => { 
-    console.log('break count:', currentSettings.countdown);
-    if (currentSettings.countdown > 0) {
-      currentSettings.countdown--;
+          //console.log('break count:', currentSettings.countdown);
+    if (currentStatus.countdown > 0) {
+      currentStatus.countdown--;
     }
     else { //when timer reaches 0, start the other countdown.
       clearInterval(currentStatus.countdownID);
