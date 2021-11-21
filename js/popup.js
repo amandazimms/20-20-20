@@ -58,10 +58,16 @@ function getDataThen(functionToRunAfterData){
   //GETTING SETTINGS/STATUS/COUNDTOWN DATA FROM BG. VARIOUS FUNCTIONS RUN THIS
 
   //POPUP INITIATES an ask to BG. Results in BG sending both current data objects, so we can set them locally
-  chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){    
+  chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){  
+    console.log('***********1 could this be the mistake? current status was:', currentStatus); 
+    console.log('***********2 could this be the mistake? res.data.currentStatus is:', res.data.currentStatus); 
+
     currentStatus = {...currentStatus, ...res.data.currentStatus};
     currentSettings = {...currentSettings, ...res.data.currentSettings};
-    
+
+    console.log('***********3 could this be the mistake? current status IS NOW:', currentStatus);  
+    console.log(',                                                                      ,');  
+
     functionToRunAfterData();
     return true;
   });
@@ -72,12 +78,14 @@ function getDataThen(functionToRunAfterData){
 function updateHomeDOM() {
   //PLUGGING IN ALL VALUES TO DOM - home area. RUNS EACH TIME POPUP IS OPENED (called via getDataThen in onready and recurring checkStatus())
   console.log("From POPUP. status:", currentStatus, "settings", currentSettings);
+  
   totalBreaksLabel.text(`Total Breaks Taken: ${currentStatus.totalBreaks}`)
 
   let clockTime = new Date(0, 0, 0, 0, 0, currentStatus.countdown, 0);
   let minutes = `${clockTime.getMinutes() < 10 ? '0' : ''}${clockTime.getMinutes()}`;
   let seconds = `${clockTime.getSeconds() < 10 ? '0' : ''}${clockTime.getSeconds()}`;
 
+        //console.log('cs.countdown', currentStatus.countdown, 'clockTime', clockTime);
   if(!currentStatus.isTakingBreak) {  //if it's WORK TIME
     breakButton.show(); 
       

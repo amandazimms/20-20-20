@@ -1,16 +1,17 @@
 //When POPUP INITIATES contact with background, this will run as a step 2
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
-  if (request.method == "changeSettings"){
+  if (request.method == "changeSettings"){ //POPUP wants to SEND BG the new settings (because user changed them)
     updateSettings(request.data)
     setCountdownTilBreak(); //restart timer so new changes begin now
     sendResponse({ method: '', data: '' });
   }
-  else if (request.method == "popupImportDataFromBG"){
+  else if (request.method == "popupImportDataFromBG"){ //POPUP wants to GET the current settings & status data from BG
     let allData = { currentSettings: currentSettings, currentStatus: currentStatus }
+    console.log('all data:', allData);
     sendResponse({method: '', data: allData});
   }
-  else if (request.method == "isTakingBreak" && request.data === true) { 
-    sendResponse({ method: "", data: currentStatus }); 
+  else if (request.method == "isTakingBreak" && request.data === true) { //POPUP wants to TELL BG to takeBreak (because user clicked)
+    sendResponse({ method: '', data: '' }); 
     takeBreak();
   } 
 });
@@ -47,7 +48,7 @@ function loadSavedSettings(){
             console.log('settings were empty! data:', data);
     } else {
             console.log('found settings! data:', data);
-      currentSettings = data;
+      currentSettings = { ...currentSettings, ...data };
     }
   });
   chrome.storage.sync.get('currentStatus', function(data) {
@@ -55,7 +56,7 @@ function loadSavedSettings(){
           console.log('status was empty! data:', data);
     } else {
           console.log('found status! data:', data);
-    currentStatus = data;
+    currentStatus = { ...currentStatus, ...data };
     }
   });
 }
