@@ -1,7 +1,6 @@
 //When POPUP INITIATES contact with background, this will run as a step 2
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
   if (request.method == "changeSettings"){
-    console.log('--------------------->tiptop, settings req.data is:', request.data);
     updateSettings(request.data)
     setCountdownTilBreak(); //restart timer so new changes begin now
     sendResponse({ method: '', data: '' });
@@ -37,22 +36,26 @@ let currentSettings = { //sent to popup.js every second.
 }
 
 //START here - triggers the whole program to run:
-//loadSavedSettings(); 
+loadSavedSettings(); 
 setCountdownTilBreak();
 
 function loadSavedSettings(){  
+  console.log("-------------------------LOADING SETTINGS")
   //when opening chrome, get the settings from previous session
   chrome.storage.sync.get('currentSettings', function(data) {
-    if(data){ //todo check if this is falsy if it's not what we want
-      currentSettings = data;
-      console.log('load settings updated: ', currentSettings);
+    if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype) {
+      console.log('settings were empty! data:', data);
+    } else {
+      console.log('found settings! data:', data);
+      currentSettings = data
     }
   });
   chrome.storage.sync.get('currentStatus', function(data) {
-    if(data){ //todo check if this is falsy if it's not what we want
-      currentStatus = data;
-      console.log('load status updated: ', currentStatus);
-    }
+    //console.log('loaded status data will be:', data);
+    // if(data){ //todo check if this is falsy if it's not what we want
+    //   currentStatus = data;
+    //   console.log('load status updated: ', currentStatus);
+    // }
   });
 }
 

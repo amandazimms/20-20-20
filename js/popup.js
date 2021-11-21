@@ -72,16 +72,12 @@ function getDataThen(functionToRunAfterData){
 function updateHomeDOM() {
   //PLUGGING IN ALL VALUES TO DOM - home area. RUNS EACH TIME POPUP IS OPENED (called via getDataThen in onready and recurring checkStatus())
   
-            // console.log('updating popup dom using this data. currentstatus:', currentStatus, 'currentsettings', currentSettings); 
-            // console.log('status.countdown', currentStatus.countdown);
-
   totalBreaksLabel.text(`Total Breaks Taken: ${currentStatus.totalBreaks}`)
 
   let clockTime = new Date(0, 0, 0, 0, 0, currentStatus.countdown, 0);
   let minutes = `${clockTime.getMinutes() < 10 ? '0' : ''}${clockTime.getMinutes()}`;
   let seconds = `${clockTime.getSeconds() < 10 ? '0' : ''}${clockTime.getSeconds()}`;
 
-  console.log('m', minutes, 's', seconds);
   if(!currentStatus.isTakingBreak) {  //if it's WORK TIME
     breakButton.show(); 
       
