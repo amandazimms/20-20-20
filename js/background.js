@@ -44,18 +44,19 @@ function loadSavedSettings(){
   //when opening chrome, get the settings from previous session
   chrome.storage.sync.get('currentSettings', function(data) {
     if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype) {
-      console.log('settings were empty! data:', data);
+            console.log('settings were empty! data:', data);
     } else {
-      console.log('found settings! data:', data);
-      currentSettings = data
+            console.log('found settings! data:', data);
+      currentSettings = data;
     }
   });
   chrome.storage.sync.get('currentStatus', function(data) {
-    //console.log('loaded status data will be:', data);
-    // if(data){ //todo check if this is falsy if it's not what we want
-    //   currentStatus = data;
-    //   console.log('load status updated: ', currentStatus);
-    // }
+    if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype) {
+          console.log('status was empty! data:', data);
+    } else {
+          console.log('found status! data:', data);
+    currentStatus = data;
+    }
   });
 }
 
@@ -71,6 +72,8 @@ function setCountdownTilBreak(){
   currentStatus.isTakingBreak = false;
 
   currentStatus.countdownID = setInterval(() => { 
+    updateStatus(currentStatus);
+
           //console.log('work count:', currentSettings.countdown);
     if (currentStatus.countdown > 0){
       currentStatus.countdown--;
@@ -114,6 +117,7 @@ function setCountdownTilWork(){
     : currentStatus.countdown = currentSettings.breakDuration;
 
   currentStatus.countdownID = setInterval(() => { 
+    updateStatus(currentStatus);
           //console.log('break count:', currentSettings.countdown);
     if (currentStatus.countdown > 0) {
       currentStatus.countdown--;
@@ -131,14 +135,14 @@ function updateSettings(newSettings){
   //await settings/status changes and update accordingly
   currentSettings = { ...currentSettings, ...newSettings };
   chrome.storage.sync.set({'currentSettings': currentSettings}); 
-    console.log('updated settings:', currentSettings);
+    console.log('updated stored settings to:', currentSettings);
 } 
 
 function updateStatus(newStatus){
   //await settings/status changes and update accordingly
   currentStatus = { ...currentStatus, ...newStatus };
   chrome.storage.sync.set({'currentStatus': currentStatus}); 
-    console.log('updated status:', currentStatus);
+    console.log('updated stored status to:', currentStatus);
 }
 
 

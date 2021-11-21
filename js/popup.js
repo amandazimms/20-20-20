@@ -71,7 +71,7 @@ function getDataThen(functionToRunAfterData){
 //#region updateDOM with data
 function updateHomeDOM() {
   //PLUGGING IN ALL VALUES TO DOM - home area. RUNS EACH TIME POPUP IS OPENED (called via getDataThen in onready and recurring checkStatus())
-  
+  console.log("From POPUP. status:", currentStatus, "settings", currentSettings);
   totalBreaksLabel.text(`Total Breaks Taken: ${currentStatus.totalBreaks}`)
 
   let clockTime = new Date(0, 0, 0, 0, 0, currentStatus.countdown, 0);
