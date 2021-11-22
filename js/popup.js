@@ -36,7 +36,6 @@ let pauseButtonImage = $('#pauseButtonImage')
 let pauseDescriptionText = $('#pauseDescriptionText');
 
 let currentStatus = {};
-let currentSettings = {};
 //#endregion
 
 $( document ).ready( function(){
@@ -62,7 +61,7 @@ $( document ).ready( function(){
 });
 
 function pressPlay(){
-  sendDataToBG("changeSettings", { breakDuration: +$(this).val(), breakTimeUnit: currentSettings.breakTimeUnit });
+  sendDataToBG("changeStatus", { breakDuration: +$(this).val(), breakTimeUnit: currentStatus.breakTimeUnit });
 
   currentStatus.isPaused = false;
   sendDataToBG("isPaused", false);
@@ -81,12 +80,11 @@ function pressPause(){
 
 
 function getDataThen(functionToRunAfterData){
-  //GETTING SETTINGS/STATUS/COUNDTOWN DATA FROM BG. VARIOUS FUNCTIONS RUN THIS
+  //GETTING STATUS/COUNDTOWN DATA FROM BG. VARIOUS FUNCTIONS RUN THIS
 
   //POPUP INITIATES an ask to BG. Results in BG sending both current data objects, so we can set them locally
   chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){  
     currentStatus = {...currentStatus, ...res.data.currentStatus};
-    currentSettings = {...currentSettings, ...res.data.currentSettings};
     functionToRunAfterData();
     return true;
   });
@@ -96,7 +94,7 @@ function getDataThen(functionToRunAfterData){
 //#region updateDOM with data
 function updateHomeDOM() {
   //PLUGGING IN ALL VALUES TO DOM - home area. RUNS EACH TIME POPUP IS OPENED (called via getDataThen in onready and recurring checkStatus())
-        //console.log("From POPUP. status:", currentStatus, "settings", currentSettings);
+        //console.log("From POPUP. status:", currentStatus);
   
   totalBreaksLabel.text(`Total Breaks Taken: ${currentStatus.totalBreaks}`)
 
@@ -136,13 +134,13 @@ function updateHomeDOM() {
 function updateSettingsDOM(){
   //PLUGGING IN ALL VALUES TO DOM - settings area. RUNS EACH TIME POPUP IS OPENED (called via getDataThen in onready)
 
-  workSlider.val(currentSettings.workDuration);
-  workSliderVal.html(currentSettings.workDuration);
-  currentSettings.workTimeUnit === "minutes" ? toggleSettingsCSS(workMinutes, workTimeUnits) : toggleSettingsCSS(workSeconds, workTimeUnits);
+  workSlider.val(currentStatus.workDuration);
+  workSliderVal.html(currentStatus.workDuration);
+  currentStatus.workTimeUnit === "minutes" ? toggleSettingsCSS(workMinutes, workTimeUnits) : toggleSettingsCSS(workSeconds, workTimeUnits);
   
-  breakSlider.val(currentSettings.breakDuration);
-  breakSliderVal.html(currentSettings.breakDuration);
-  currentSettings.breakTimeUnit === "minutes" ? toggleSettingsCSS(breakMinutes, breakTimeUnits) : toggleSettingsCSS(breakSeconds, breakTimeUnits);
+  breakSlider.val(currentStatus.breakDuration);
+  breakSliderVal.html(currentStatus.breakDuration);
+  currentStatus.breakTimeUnit === "minutes" ? toggleSettingsCSS(breakMinutes, breakTimeUnits) : toggleSettingsCSS(breakSeconds, breakTimeUnits);
 }
 //#endregion
 
@@ -151,10 +149,10 @@ function toggleWorkTimeUnit (timeUnit){
   //when user clicks 'seconds' or 'minutes' on the work slider, this does the toggling
   let clicked = timeUnit.data.clicked ; //unit of time that was clicked (seconds or minutes)
 
-  if (currentSettings.workTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
-    currentSettings.workTimeUnit = clicked;
-    //todo our local currentSettings will get updated after .5s anyway, but should set it here too or?
-    sendDataToBG("changeSettings", { workDuration: workSlider.val(), workTimeUnit: currentSettings.workTimeUnit });
+  if (currentStatus.workTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
+    currentStatus.workTimeUnit = clicked;
+    //todo our local currentStatus will get updated after .5s anyway, but should set it here too or?
+    sendDataToBG("changeStatus", { workDuration: workSlider.val(), workTimeUnit: currentStatus.workTimeUnit });
     toggleSettingsCSS(this, workTimeUnits);
   } 
 }
@@ -163,10 +161,10 @@ function toggleBreakTimeUnit (timeUnit){
   //when user clicks 'seconds' or 'minutes' on the break slider, this does the toggling
   let clicked = timeUnit.data.clicked ; //unit of time that was clicked (seconds or minutes)
 
-  if (currentSettings.breakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
-    currentSettings.breakTimeUnit = clicked;
-    //todo our local currentSettings will get updated after .5s anyway, but should set it here too or?
-    sendDataToBG("changeSettings", { breakDuration: breakSlider.val(), breakTimeUnit: currentSettings.breakTimeUnit });
+  if (currentStatus.breakTimeUnit != clicked) { //if we clicked the inactive one, activate it and deactivate the other
+    currentStatus.breakTimeUnit = clicked;
+    //todo our local currentStatus will get updated after .5s anyway, but should set it here too or?
+    sendDataToBG("changeStatus", { breakDuration: breakSlider.val(), breakTimeUnit: currentStatus.breakTimeUnit });
     toggleSettingsCSS(this, breakTimeUnits);
   } 
 }
@@ -197,7 +195,7 @@ workSlider.on('input', function () {//input fires constantly, i.e. while mouse i
 });
 
 workSlider.on('change', function () {//change fires only after mouse is released
-  sendDataToBG("changeSettings", { workDuration: +$(this).val(), workTimeUnit: currentSettings.workTimeUnit });
+  sendDataToBG("changeStatus", { workDuration: +$(this).val(), workTimeUnit: currentStatus.workTimeUnit });
 });
 
 breakSlider.on('input', function () { //input fires constantly, i.e. while mouse is still down the value will change
@@ -205,7 +203,7 @@ breakSlider.on('input', function () { //input fires constantly, i.e. while mouse
 });
 
 breakSlider.on('change', function () {//change fires only after mouse is released
-  sendDataToBG("changeSettings", { breakDuration: +$(this).val(), breakTimeUnit: currentSettings.breakTimeUnit });
+  sendDataToBG("changeStatus", { breakDuration: +$(this).val(), breakTimeUnit: currentStatus.breakTimeUnit });
 });
 //#endregion
 

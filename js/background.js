@@ -1,15 +1,15 @@
 //When POPUP INITIATES contact with background, this will run as a step 2
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
-  if (request.method == "changeSettings"){ //POPUP wants to SEND BG the new settings (because user changed them)
+  if (request.method == "changeStatus"){ //POPUP wants to SEND BG the new status (because user changed them)
     console.log('req.data:', request.data);
-    updateSettings(request.data);
+    updateStatus(request.data);
     setCountdownTilBreak(); //restart timer so new changes begin now
     sendResponse({ method: '', data: '' });
   }
-  else if (request.method == "popupImportDataFromBG"){ //POPUP wants to GET the current settings & status data from BG
-    let allData = { currentSettings: currentSettings, currentStatus: currentStatus }
+  else if (request.method == "popupImportDataFromBG"){ //POPUP wants to GET the current status data from BG
+    let dataToSend = { currentStatus: currentStatus }
             //console.log('background data to send (all data):', allData);
-    sendResponse({method: '', data: allData});
+    sendResponse({method: '', data: dataToSend});
   } 
   else if (request.method == "isTakingBreak" && request.data === true) { //POPUP wants to TELL BG to takeBreak (because user clicked)
     sendResponse({ method: '', data: '' }); 
@@ -31,127 +31,78 @@ chrome.notifications.onClosed.addListener(function(timeToBreak) {
   return true;  
 });
 
-let currentStatus = { //sent to popup.js every second.
+const defaultStatus = { //sent to popup.js every second.
+  workDuration: 20, //in {workTimeUnit}s, how long between breaks? - 20 minutes = 1200 seconds
+  workTimeUnit: 'minutes',
+  breakDuration: 20, //in {breakTimeUnit}s, how long to take a break - 20 seconds
+  breakTimeUnit: 'seconds',
   isTakingBreak: false, //BREAK, throughout, refers to looking away, e.g. practicing the '20-20-20' rule
   isPaused: false,
   countdown: 0,  //countown - when finished, time to either start or stop taking a break
   totalBreaks: 0, //count of how many breaks the user has taken
   countdownID: 0  //used to start and stop countdowns
-}; 
-
-
-//START here - triggers the whole program to run:
-//loadSavedSettings(); //.then(function (result){ doThisSecond() }); 
-//setCountdownTilBreak();
-//TODO setCountdown is running before loadSaved populates with data
-
-// function loadSavedSettings(){  
-//   console.log("-------------------------LOADING SETTINGS")
-//   //when opening chrome, get the settings from previous session
-
-  
-// }
-//ASYNC EXAMPLE FROM LUKE
-// const main = async () => {
-
-//   let userData
-//   try{
-//     userData = await getMyAsyncData()
-//   }catch(e) {
-//     console.log('oops i broke', e)
-//   }
-// }
-
-// //PROMISE EXAMPLE FROM LUKE
-// const getMyAsyncData = () => {
-//   return new Promise((resolve,reject) => {
-    
-//   })
-// }
-
-// getMyAsyncData().then( data => {
-
-// }).catch( e => {
-  
-// })
-
-//first check - does this user have existing settings? (chrome... get) - 
-//it will 
-//if not, set them. 
-//if so
-
-//make a getSettings
-//make a setSettings
-//wrap them both in promises
-
-function updateStatus(newStatus){//todo make it look like setting
-  //await settings/status changes and update accordingly
-  currentStatus = { ...currentStatus, ...newStatus };
-  chrome.storage.sync.set({'currentStatus': currentStatus}); 
-        //console.log('updated stored status to:', currentStatus);
 }
-const defaultSettings = { //sent to popup.js every second.
+
+let currentStatus = { //sent to popup.js every second.
   workDuration: 20, //in {workTimeUnit}s, how long between breaks? - 20 minutes = 1200 seconds
   workTimeUnit: 'minutes',
   breakDuration: 20, //in {breakTimeUnit}s, how long to take a break - 20 seconds
   breakTimeUnit: 'seconds',
+  isTakingBreak: false, //BREAK, throughout, refers to looking away, e.g. practicing the '20-20-20' rule
+  isPaused: false,
+  countdown: 0,  //countown - when finished, time to either start or stop taking a break
+  totalBreaks: 0, //count of how many breaks the user has taken
+  countdownID: 0  //used to start and stop countdowns
 }
 
-let currentSettings = { //sent to popup.js every second.
-  workDuration: 20, //in {workTimeUnit}s, how long between breaks? - 20 minutes = 1200 seconds
-  workTimeUnit: 'minutes',
-  breakDuration: 20, //in {breakTimeUnit}s, how long to take a break - 20 seconds
-  breakTimeUnit: 'seconds',
-}
 
-function updateSettings(newSettings){
-  console.log('settings prior to update:', currentSettings);
-  //await settings/status changes and update accordingly
+function updateStatus(newStatus){
+            //console.log('status prior to update:', currentStatus);
   return new Promise((resolve, reject) => {
-    let tempSettings = { ...currentSettings, ...newSettings }
+    let tempStatus = { ...currentStatus, ...newStatus }
 
-    chrome.storage.sync.set({'currentSettings': tempSettings}, () => {
-      console.log('this will be saved: ', tempSettings );
-      
-
-      chrome.storage.sync.get(['currentSettings'], data => {
-        currentSettings = data.currentSettings;
-        console.log('this was saved:', data.currentSettings); 
-        console.log('current settings is:', currentSettings);
-
-        resolve(data);
+    chrome.storage.sync.set({'currentStatus': tempStatus}, () => {
+      ///STORATE is the "SOURCE OF TRUTH" for our status. 
+           //console.log('this will be saved: ', tempStatus )      
+      chrome.storage.sync.get(['currentStatus'], data => {
+        if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype ){
+          resolve(defaultStatus);
+        } else {
+          currentStatus = data.currentStatus;
+            // console.log('this was saved:', data.currentStatus); 
+          console.log('current status is:', currentStatus);
+          resolve(currentStatus);
+        }
+        
       })
     }); 
-    //after setting, run a get - 
   })
-} 
+}
 
-const loadSettingsAsync = () => {
-  let settings;
+const loadStatusAsync = () => {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.get(['currentSettings'], data => {
+    chrome.storage.sync.get(['currentStatus'], data => {
       
       if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype ) {
-          console.log('settings were empty! data:', data); 
-          settings = currentSettings;
+          console.log('status was empty! data:', data); 
+          return updateStatus(currentStatus);
       } else {
-          console.log('found settings! data:', data.currentSettings);
-          settings = data.currentSettings;
+          console.log('found status! data:', data.currentStatus);
+          return updateStatus(data.currentStatus);
       }
-      return updateSettings(settings);
     })
   })
 } 
 
-loadSettingsAsync().then( (bla) =>{
-  currentSettings = bla;
-  console.log('back from loadSettings / updateSettings with:', bla);
+loadStatusAsync().then( (bla) =>{
+  //currentStatus = bla;
+  console.log('back from loadStatus / updateStatus with:', bla);
   wantToRunThisSecond(bla);
 }).catch(e => error);
 
 
 function wantToRunThisSecond(data){
-  console.log("want to run second. here is the data we got:", data, "and waited and I got this for settings", currentSettings);
+  console.log("want to run second. here is the data we got:", data, "and waited and I got this for status", currentStatus);
 
 }
 
@@ -175,9 +126,9 @@ function setCountdownTilBreak(){
   
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(currentStatus.countdownID);
-  currentSettings.workTimeUnit == 'minutes'
-      ? currentStatus.countdown = currentSettings.workDuration * 60
-      : currentStatus.countdown = currentSettings.workDuration;
+  currentStatus.workTimeUnit == 'minutes'
+      ? currentStatus.countdown = currentStatus.workDuration * 60
+      : currentStatus.countdown = currentStatus.workDuration;
             console.log('countdown starts at:', currentStatus.countdown);
 
   currentStatus.isTakingBreak = false;
@@ -185,7 +136,7 @@ function setCountdownTilBreak(){
   currentStatus.countdownID = setInterval(() => { 
     updateStatus(currentStatus);
 
-            console.log('work count:', currentSettings.countdown);
+            console.log('work count:', currentStatus.countdown);
     if (currentStatus.countdown > 0){
       currentStatus.countdown--;
     }
@@ -223,13 +174,13 @@ function setCountdownTilWork(){
   
   //start by initializing timer, clearing notifications and previously running timers
   clearInterval(currentStatus.countdownID);
-  currentSettings.breakTimeUnit == 'minutes' 
-    ? currentStatus.countdown = currentSettings.breakDuration * 60 
-    : currentStatus.countdown = currentSettings.breakDuration;
+  currentStatus.breakTimeUnit == 'minutes' 
+    ? currentStatus.countdown = currentStatus.breakDuration * 60 
+    : currentStatus.countdown = currentStatus.breakDuration;
 
   currentStatus.countdownID = setInterval(() => { 
     updateStatus(currentStatus);
-          console.log('break count:', currentSettings.countdown);
+          console.log('break count:', currentStatus.countdown);
     if (currentStatus.countdown > 0) {
       currentStatus.countdown--;
     }
