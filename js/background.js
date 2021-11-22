@@ -56,8 +56,8 @@ let currentStatus = { //sent to popup.js every second.
 }
 
 
-function updateStatus(newStatus){
-            //console.log('status prior to update:', currentStatus);
+const updateStatus = (newStatus) => {      
+
   return new Promise((resolve, reject) => {
     let tempStatus = { ...currentStatus, ...newStatus }
 
@@ -66,6 +66,7 @@ function updateStatus(newStatus){
            //console.log('this will be saved: ', tempStatus )      
       chrome.storage.sync.get(['currentStatus'], data => {
         if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype ){
+          console.log('update status found no status saved, and will resolve the default status');
           resolve(defaultStatus);
         } else {
           currentStatus = data.currentStatus;
@@ -73,7 +74,6 @@ function updateStatus(newStatus){
           console.log('current status is:', currentStatus);
           resolve(currentStatus);
         }
-        
       })
     }); 
   })
@@ -81,16 +81,21 @@ function updateStatus(newStatus){
 
 const loadStatusAsync = () => {
   return new Promise((resolve, reject) => {
+
     chrome.storage.sync.get(['currentStatus'], data => {
       
+      let statusToSend; 
       if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype ) {
           console.log('status was empty! data:', data); 
-          return updateStatus(currentStatus);
+          statusToSend = currentStatus;
       } else {
           console.log('found status! data:', data.currentStatus);
-          return updateStatus(data.currentStatus);
+          statusToSend = data.currentStatus;
       }
+
+      return updateStatus(statusToSend);
     })
+
   })
 } 
 
@@ -103,22 +108,7 @@ loadStatusAsync().then( (bla) =>{
 
 function wantToRunThisSecond(data){
   console.log("want to run second. here is the data we got:", data, "and waited and I got this for status", currentStatus);
-
 }
-
-
-  //todo bring this back eventually v
-  // chrome.storage.sync.get(['currentStatus'], function(data) {
-  //   if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype) {
-  //         console.log('status was empty! data:', data);
-  //   } else {
-  //         console.log('found status! data:', data);
-  //   currentStatus = { ...currentStatus, ...data };
-  //   }
-  // });
-
-
-
 
 
 function setCountdownTilBreak(){  
