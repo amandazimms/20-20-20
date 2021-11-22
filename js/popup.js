@@ -85,6 +85,7 @@ function getDataThen(functionToRunAfterData){
   //POPUP INITIATES an ask to BG. Results in BG sending both current data objects, so we can set them locally
   chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){  
     currentStatus = {...currentStatus, ...res.data.currentStatus};
+    console.log('popup currentStatus is:', currentStatus);
     functionToRunAfterData();
     return true;
   });
@@ -250,7 +251,7 @@ function takeBreak(){
   chrome.notifications.clear('timeToBreak');
 
   currentStatus.isTakingBreak = true;
-  sendDataToBG("isTakingBreak", true);
+  sendDataToBG("isTakingBreak", { isTakingBreak: true });
 }
 
 function checkStatus(){ 

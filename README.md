@@ -39,10 +39,11 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 - [x] research other extensions - need to add a description / homepage? maybe a ? icon 'about' type page next to the settings and timer?
 - [x] make buttons clickier feeling
 - [x] update 128/48/32/16 images
-
+- [x] storage - settings and countdown are saved even if chrome is closed and reopened
+ 
 ### Phase 4 - polish and additional features:
 - [x] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?
-- [.] add a pause button - see toucan toggle
+- [.] (in progress) add a pause button - see toucan toggle
 - [x] add link to 20-20-20 rule info in popup
 
 
