@@ -42,9 +42,9 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 
 ### Phase 4 - polish and additional features:
 - [x] display some stat on the popup - how many times has user taken 20-20-20 breaks? streaks?
-- [ ] add a pause button - see toucan toggle
+- [.] add a pause button - see toucan toggle
 - [x] add link to 20-20-20 rule info in popup
-- [ ] add abillity to choose whether home/stats/settings displays as the home screen (first one to show when popup is opened)
+
 
 ### Known Issues
 - [x] debug issue with sendMessage timeout
@@ -53,4 +53,5 @@ Thanks to Google for getting me hooked on Chrome extensions with these simple an
 
 ### Stretch goals
 - [ ] expand functionality for other types of breaks - stretching, water, exercise, sit/stand desk, etc?
+- [ ] add abillity to choose whether home/stats/settings displays as the home screen (first one to show when popup is opened)
 - [ ] store totalBreaks: cookies?

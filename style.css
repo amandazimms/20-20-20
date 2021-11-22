@@ -57,26 +57,24 @@ p {
   margin-right: 2px;
   padding: 2px 6px 2px 6px;
   border-radius: 6px;
-  font-size: 12px;
-  font-weight: 400;
 }
 
-.playPauseArea{
-  /* white-space: nowrap; * force the elements to stay side by side * */
-}
-
-.pauseDescriptionText{
+#pauseDescriptionText{
   display: inline-block;
-  /* display: inline;
-  white-space: normal;
-  vertical-align: middle */
+  vertical-align: center;
+  font-style: italic; 
+  white-space: pre-wrap;      /* CSS3 */   
 }
 
-.playPauseImage {
+.playPauseButton {
   display: inline-block;
-  vertical-align: top;
-  width: 35px;
+  background-color: #fff;
+  padding: 0;
   margin: 5px 10px 20px 0;
+  vertical-align: top;
+ }
+.playPauseImage {
+  width: 35px;
 }
 
 #settingsSpacer{
@@ -86,11 +84,13 @@ p {
 .timeUnitInactive {
   color: rgb(179, 184, 160);
   background-color: #fff;
+  font-weight: 300;
 }
 
 .timeUnitActive {
   color: black;
   background-color: rgb(152, 190, 81);
+  font-weight: 400;
 }
 
 .settingsValue {
@@ -103,7 +103,6 @@ p {
 .slider {
   display: block;
 }
-
 
 .logo {
   width: 130px;

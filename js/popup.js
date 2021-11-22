@@ -30,6 +30,10 @@ let infoIcon = $('#infoIcon');
 let infoArea = $('#infoArea');
 
 let playButton = $('#playButton');
+let playButtonImage = $('#playButtonImage')
+let pauseButton = $('#pauseButton');
+let pauseButtonImage = $('#pauseButtonImage')
+let pauseDescriptionText = $('#pauseDescriptionText');
 
 let currentStatus = {};
 let currentSettings = {};
@@ -48,26 +52,41 @@ $( document ).ready( function(){
   settingsIcon.on('click', openSettings);
   infoIcon.on('click', openInfo);
 
+  playButton.on('click', pressPlay);
+  pauseButton.on('click', pressPause);
+
   workSeconds.on('click', {clicked: 'seconds'}, toggleWorkTimeUnit); 
   workMinutes.on('click', {clicked: 'minutes'}, toggleWorkTimeUnit); 
   breakSeconds.on('click', {clicked: 'seconds'}, toggleBreakTimeUnit); 
   breakMinutes.on('click', {clicked: 'minutes'}, toggleBreakTimeUnit); 
 });
 
+function pressPlay(){
+  sendDataToBG("changeSettings", { breakDuration: +$(this).val(), breakTimeUnit: currentSettings.breakTimeUnit });
+
+  currentStatus.isPaused = false;
+  sendDataToBG("isPaused", false);
+  playButtonImage.attr('src','./images/Play.png');
+  pauseButtonImage.attr('src','./images/PauseUnselected.png');
+  pauseDescriptionText.text('');
+}
+
+function pressPause(){
+  currentStatus.isPaused = true;
+  sendDataToBG("isPaused", true);
+  playButtonImage.attr('src','./images/PlayUnselected.png');
+  pauseButtonImage.attr('src','./images/Pause.png');
+  pauseDescriptionText.text('Twenty is now paused');
+}
+
+
 function getDataThen(functionToRunAfterData){
   //GETTING SETTINGS/STATUS/COUNDTOWN DATA FROM BG. VARIOUS FUNCTIONS RUN THIS
 
   //POPUP INITIATES an ask to BG. Results in BG sending both current data objects, so we can set them locally
   chrome.runtime.sendMessage({method: "popupImportDataFromBG", data: ""}, function (res){  
-    console.log('***********1 could this be the mistake? current status was:', currentStatus); 
-    console.log('***********2 could this be the mistake? res.data.currentStatus is:', res.data.currentStatus); 
-
     currentStatus = {...currentStatus, ...res.data.currentStatus};
     currentSettings = {...currentSettings, ...res.data.currentSettings};
-
-    console.log('***********3 could this be the mistake? current status IS NOW:', currentStatus);  
-    console.log(',                                                                      ,');  
-
     functionToRunAfterData();
     return true;
   });
@@ -77,7 +96,7 @@ function getDataThen(functionToRunAfterData){
 //#region updateDOM with data
 function updateHomeDOM() {
   //PLUGGING IN ALL VALUES TO DOM - home area. RUNS EACH TIME POPUP IS OPENED (called via getDataThen in onready and recurring checkStatus())
-  console.log("From POPUP. status:", currentStatus, "settings", currentSettings);
+        //console.log("From POPUP. status:", currentStatus, "settings", currentSettings);
   
   totalBreaksLabel.text(`Total Breaks Taken: ${currentStatus.totalBreaks}`)
 
@@ -230,14 +249,10 @@ function unselectAllIcons(){
 function takeBreak(){ 
   //runs when user clicks "take a break (or take a break early)"
   breakButton.css('background-color','#819C50');
-  currentStatus.isTakingBreak = true;
-
   chrome.notifications.clear('timeToBreak');
 
-  //POPUP INITIATES to send "true" to background (re: click "take a break" = true)
-  chrome.runtime.sendMessage({ method: "isTakingBreak", data: true }, function (res) {
-    return true;
-  });
+  currentStatus.isTakingBreak = true;
+  sendDataToBG("isTakingBreak", true);
 }
 
 function checkStatus(){ 
