@@ -70,6 +70,7 @@ startTwenty();
 
 function startTwenty(){
   loadStatusAsync().then( () =>{
+
     setCountdownTilBreak();
   }).catch(e => error);
 }
@@ -93,6 +94,30 @@ function loadStatusAsync () {
   })
 } 
 
+function updateStatus(newStatus){
+  //console.log('status prior to update:', currentStatus);
+  return new Promise((resolve, reject) => {
+    let tempStatus = { ...currentStatus, ...newStatus }
+
+      chrome.storage.sync.set({'currentStatus': tempStatus}, () => {
+      ///STORATE is the "SOURCE OF TRUTH" for our status. 
+
+        chrome.storage.sync.get(['currentStatus'], data => {
+          if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype ){
+          resolve(defaultStatus);
+          } 
+          else {
+          currentStatus = data.currentStatus;
+            // console.log('this was saved as the status:', data.currentStatus); 
+          console.log('current status is:', currentStatus);
+          resolve(currentStatus);
+          }
+
+      })
+    }); 
+  })
+}
+
 
 function setCountdownTilBreak(){  
   // START the first timer, WAIT while user works, til ready for break
@@ -105,7 +130,7 @@ function setCountdownTilBreak(){
              
   currentStatus.isTakingBreak = false;
         //console.log('status after converting minutes/seconds and whether isTakingBreak:', currentStatus);
-  currentStatus.countdownID = setInterval(() => { 
+  currentStatus.countdownID = setInterval( () => { 
 
     if (currentStatus.countdown > 0){
       currentStatus.countdown--;
@@ -174,29 +199,7 @@ function setCountdownTilWork(){
 //   setCountdownTilBreak();
 // }
 
-function updateStatus(newStatus){
-  //console.log('status prior to update:', currentStatus);
-  return new Promise((resolve, reject) => {
-    let tempStatus = { ...currentStatus, ...newStatus }
 
-      chrome.storage.sync.set({'currentStatus': tempStatus}, () => {
-      ///STORATE is the "SOURCE OF TRUTH" for our status. 
-
-        chrome.storage.sync.get(['currentStatus'], data => {
-          if ( data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype ){
-          resolve(defaultStatus);
-          } 
-          else {
-          currentStatus = data.currentStatus;
-            // console.log('this was saved as the status:', data.currentStatus); 
-          console.log('current status is:', currentStatus);
-          resolve(currentStatus);
-          }
-
-      })
-    }); 
-  })
-}
 
 
 

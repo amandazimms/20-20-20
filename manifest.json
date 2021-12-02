@@ -1,7 +1,7 @@
 {
   "name": "Twenty",
   "description": "Giving gentle reminders about the '20-20-20' rule to promote eye health.",
-  "version": "1.0",
+  "version": "0.0.0.1",
   "manifest_version": 3,
   "background": {
     "service_worker": "js/background.js"

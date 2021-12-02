@@ -3,7 +3,7 @@
 
 ## Description
 
-Twenty is a Chrome extension that helps you avoid eye strain! Did you know that [opthamologists recommend](https://advancedeyecaremd.net/20-20-20-tipstopreventeyestrain/) that during long periods of screen use, we look at something 20 feet away, every 20 minutes, for 20 seconds? The 20-20-20 rule has helped me personally with eye strain, and it also provides a great opportunity to take a small step back from your work and gather your thoughts. 
+Twenty is a Chrome extension that helps you avoid eye strain! Did you know that [ophthalmologists recommend](https://advancedeyecaremd.net/20-20-20-tipstopreventeyestrain/) that during long periods of screen use, we look at something 20 feet away, every 20 minutes, for 20 seconds? With Twenty, you'll get a notification when it's time to take your "twenty" break. When twenty seconds are up, the twenty minute timer resumes again. You can even customize the lengths of your working and break periods in the settings tab.
 
 
 ## Screenshot
